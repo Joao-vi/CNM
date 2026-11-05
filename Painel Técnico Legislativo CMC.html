@@ -1,0 +1,1382 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Painel Técnico Legislativo CMC</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  if (window.tailwind) tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: 'var(--bg)', surface: 'var(--surface)', surface2: 'var(--surface-2)', line: 'var(--line)',
+          fg: 'var(--fg)', muted: 'var(--muted)', accent: 'var(--accent)', accentsoft: 'var(--accent-soft)',
+          good: 'var(--good)', warn: 'var(--warn)', bad: 'var(--bad)'
+        },
+        fontFamily: {
+          display: ['Literata', 'Georgia', 'serif'],
+          sans: ['"Public Sans"', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'ui-monospace', 'Menlo', 'monospace']
+        }
+      }
+    }
+  };
+</script>
+<style>
+  /* Layout: sidebar de navegação (desktop) / abas roláveis (mobile) + área de conteúdo em cards discretos.
+     Cor: neutros levemente esverdeados, acento verde-legislativo; três cores de área validadas para daltonismo. */
+  :root {
+    --bg: #F2F5F3; --surface: #FFFFFF; --surface-2: #E9EFEC; --line: #D3DDD8;
+    --fg: #14211C; --muted: #53645D; --accent: #155E4A; --accent-ink: #FFFFFF; --accent-soft: #DCEDE5;
+    --c-bas: #3B6FB6; --c-ger: #C47F17; --c-esp: #16855E;
+    --good: #1C7247; --warn: #9A6212; --bad: #B4342D;
+    --good-soft: #DFF1E6; --warn-soft: #F7EBD6; --bad-soft: #F8E1DE;
+    --st0: #8A9993; --st1: #3B6FB6; --st2: #16855E; --st3: #8B5CC4; --st4: #C47F17;
+    --font-display: 'Literata', Georgia, serif;
+    --font-body: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1412; --surface: #151D1A; --surface-2: #1C2622; --line: #2B3732;
+      --fg: #E3EBE7; --muted: #9AABA4; --accent: #52B893; --accent-ink: #0B1210; --accent-soft: #1C392F;
+      --c-bas: #5F8ED6; --c-ger: #C98A2A; --c-esp: #2FA07A;
+      --good: #5CC795; --warn: #E2A646; --bad: #F07D73;
+      --good-soft: #17332A; --warn-soft: #3A2C14; --bad-soft: #3D1E1B;
+      --st0: #6F7F79; --st1: #5F8ED6; --st2: #2FA07A; --st3: #A37FDB; --st4: #C98A2A;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1412; --surface: #151D1A; --surface-2: #1C2622; --line: #2B3732;
+    --fg: #E3EBE7; --muted: #9AABA4; --accent: #52B893; --accent-ink: #0B1210; --accent-soft: #1C392F;
+    --c-bas: #5F8ED6; --c-ger: #C98A2A; --c-esp: #2FA07A;
+    --good: #5CC795; --warn: #E2A646; --bad: #F07D73;
+    --good-soft: #17332A; --warn-soft: #3A2C14; --bad-soft: #3D1E1B;
+    --st0: #6F7F79; --st1: #5F8ED6; --st2: #2FA07A; --st3: #A37FDB; --st4: #C98A2A;
+    color-scheme: dark;
+  }
+  [hidden] { display: none !important; }
+  html { background: var(--bg); }
+  body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.01em; }
+  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .eyebrow { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+  .gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+
+  .nav-link { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+  .nav-link:hover { background: var(--surface-2); color: var(--fg); }
+  .nav-link[aria-current="page"] { background: var(--accent-soft); color: var(--fg); font-weight: 600; }
+  .nav-link .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--line); flex: none; }
+  .nav-link[aria-current="page"] .dot { background: var(--accent); }
+
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font-weight: 500; font-size: 14px; cursor: pointer; }
+  .btn:hover { background: var(--surface-2); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: var(--accent); filter: brightness(1.08); }
+  .btn-danger { color: var(--bad); }
+  .btn-sm { padding: 4px 9px; font-size: 13px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .field { width: 100%; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font-size: 14px; }
+  label.lbl { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+
+  .tbl-wrap { overflow-x: auto; }
+  table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .tbl th { text-align: left; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .tbl td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tbl tr:last-child td { border-bottom: 0; }
+  .tbl td.r, .tbl th.r { text-align: right; }
+  .tbl tfoot td { font-weight: 700; border-top: 2px solid var(--line); }
+
+  .pill { display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; border: 1px solid transparent; }
+  .pill-of { background: var(--accent-soft); color: var(--fg); }
+  .pill-inf { background: var(--warn-soft); color: var(--warn); }
+  .pill-rec { background: var(--surface-2); color: var(--muted); border-color: var(--line); }
+  .pill-bad { background: var(--bad-soft); color: var(--bad); }
+  .pill-good { background: var(--good-soft); color: var(--good); }
+  .swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; display: inline-block; }
+
+  .bar-track { background: var(--surface-2); border-radius: 4px; height: 10px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 0 4px 4px 0; }
+  .stack { display: flex; gap: 2px; height: 34px; }
+  .stack > div { height: 100%; display: flex; align-items: center; padding: 0 8px; color: #fff; font-size: 12px; font-weight: 600; min-width: 0; overflow: hidden; white-space: nowrap; }
+  .stack > div:first-child { border-radius: 6px 0 0 6px; }
+  .stack > div:last-child { border-radius: 0 6px 6px 0; }
+
+  .topic-row { display: grid; grid-template-columns: auto 1fr; gap: 10px; padding: 9px 12px; border-top: 1px solid var(--line); }
+  .topic-row:hover { background: var(--surface-2); }
+  .topic-ctrls { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
+  .topic-ctrls select { padding: 2px 6px; font-size: 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); }
+  .chk { width: 18px; height: 18px; accent-color: var(--accent); margin-top: 2px; cursor: pointer; }
+  .group-head { padding: 8px 12px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); border-top: 1px solid var(--line); }
+  .st-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+  .star { background: none; border: 0; cursor: pointer; font-size: 13px; padding: 1px 6px; border-radius: 6px; color: var(--muted); border: 1px solid var(--line); }
+  .star[aria-pressed="true"] { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); font-weight: 600; }
+
+  details.disc > summary { list-style: none; cursor: pointer; }
+  details.disc > summary::-webkit-details-marker { display: none; }
+  details.disc > summary .chev { transition: transform .15s; }
+  details.disc[open] > summary .chev { transform: rotate(90deg); }
+
+  .tl-item { display: grid; grid-template-columns: 112px 1fr; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+  .tl-item.past { opacity: .55; }
+  .tl-item.na { opacity: .5; }
+  .tl-item.exam { background: var(--accent-soft); border-radius: 8px; padding: 10px; border-top-color: transparent; }
+
+  #tip { position: fixed; z-index: 50; pointer-events: none; background: var(--fg); color: var(--bg); font-size: 12px; padding: 6px 9px; border-radius: 6px; max-width: 260px; line-height: 1.35; }
+  .toast { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 60; background: var(--fg); color: var(--bg); padding: 10px 14px; border-radius: 8px; font-size: 14px; }
+
+  .alert { border-left: 3px solid var(--warn); background: var(--warn-soft); padding: 10px 12px; border-radius: 0 8px 8px 0; }
+  .alert.bad { border-left-color: var(--bad); background: var(--bad-soft); }
+  .alert.ok { border-left-color: var(--good); background: var(--good-soft); }
+
+  .plan-day { min-width: 0; }
+  .plan-block { border: 1px solid var(--line); border-left-width: 4px; border-radius: 6px; padding: 6px 8px; background: var(--surface); font-size: 13px; overflow-wrap: anywhere; }
+
+  /* Modo impressão do edital verticalizado */
+  .print-sheet { background: #fff; color: #111; font-family: var(--font-body); }
+  .print-sheet h2, .print-sheet h3 { font-family: var(--font-display); color: #111; }
+  .print-sheet .pr-row { display: grid; grid-template-columns: 22px 1fr 90px; gap: 8px; padding: 4px 0; border-bottom: 1px dotted #bbb; font-size: 13px; }
+  .print-sheet .pr-box { width: 13px; height: 13px; border: 1.5px solid #333; border-radius: 2px; margin-top: 3px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; line-height: 1; }
+  @media print {
+    body::before, #sidebar, #topbar, .no-print { display: none !important; }
+    body, html { background: #fff !important; }
+    main { padding: 0 !important; }
+    section[data-view]:not(#v-edital) { display: none !important; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div id="app" class="min-h-full md:flex">
+  <!-- Sidebar (desktop) -->
+  <aside id="sidebar" class="hidden md:flex md:flex-col md:w-60 md:shrink-0 md:sticky md:top-0 md:h-screen bg-surface border-r border-line px-3 py-5 gap-1 overflow-y-auto">
+    <div class="px-3 pb-4">
+      <div class="eyebrow">Câmara Municipal de Cuiabá</div>
+      <div class="font-display text-lg font-semibold leading-tight mt-1">Técnico Legislativo</div>
+      <div class="text-xs text-muted mt-1">Edital nº 001/2026-CMC · Selecon</div>
+    </div>
+    <nav id="navSide" class="flex flex-col gap-0.5" aria-label="Seções"></nav>
+    <div class="mt-auto px-3 pt-4 text-xs text-muted">
+      <button id="themeBtn" class="btn btn-sm w-full justify-center" type="button">Tema: sistema</button>
+      <p class="mt-3">Progresso salvo neste navegador.</p>
+    </div>
+  </aside>
+
+  <div class="flex-1 min-w-0">
+    <!-- Topbar (mobile) -->
+    <header id="topbar" class="md:hidden sticky z-20 bg-surface border-b border-line" style="top: env(safe-area-inset-top, 0px)">
+      <div class="gutter flex items-center justify-between gap-3" style="padding-block: 10px 6px">
+        <div class="min-w-0">
+          <div class="eyebrow truncate">CMC · Edital 001/2026</div>
+          <div class="font-display font-semibold leading-tight">Técnico Legislativo</div>
+        </div>
+        <button id="themeBtnM" class="btn btn-sm" type="button">Tema</button>
+      </div>
+      <nav id="navTop" class="gutter flex gap-1 overflow-x-auto" style="padding-block: 0 8px" aria-label="Seções"></nav>
+    </header>
+
+    <main class="gutter max-w-6xl mx-auto" style="padding-block: 24px 64px">
+
+      <!-- ===================== PAINEL ===================== -->
+      <section data-view id="v-painel" class="flex flex-col gap-5">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <div class="eyebrow">Concurso Público · Edital nº 001/2026-CMC, consolidado com a Retificação nº 01/2026</div>
+            <h1 class="text-2xl md:text-3xl font-semibold mt-1">Técnico Legislativo (CNM 01)</h1>
+            <p class="text-muted mt-1 max-w-2xl">Câmara Municipal de Cuiabá-MT · banca Instituto Selecon · nível médio · provas em Cuiabá-MT.</p>
+          </div>
+          <div class="flex gap-2 flex-wrap text-xs">
+            <span class="pill pill-of">Oficial = dado do edital</span>
+            <span class="pill pill-inf">Inferência = cálculo sobre dado oficial</span>
+            <span class="pill pill-rec">Recomendação = sugestão do painel</span>
+          </div>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-3">
+          <div class="card p-5 lg:col-span-1 flex flex-col gap-2" style="border-color: var(--accent)">
+            <div class="eyebrow">Contagem regressiva · prova objetiva e discursiva</div>
+            <div class="flex items-baseline gap-2"><span id="cdDays" class="num text-5xl font-medium">–</span><span class="text-muted">dias</span></div>
+            <div class="text-sm"><b>20/12/2026 (domingo)</b>, turno da tarde para Técnico Legislativo.</div>
+            <div class="text-xs text-muted">Data: Anexo I, p. 28 · Turno: item 10.1, p. 16–17 · Horário exato: não informado no edital (sai no Cartão de Confirmação em 09/12/2026).</div>
+            <div class="text-xs text-muted">Duração: 4h30min para objetiva + discursiva (item 10.2, p. 17).</div>
+          </div>
+          <div class="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-3" id="kpis"></div>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-5">
+          <div class="card p-5 lg:col-span-3 min-w-0">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <h2 class="text-lg font-semibold">Seu progresso por disciplina</h2>
+              <span class="text-xs text-muted">% de tópicos com status Estudado ou superior</span>
+            </div>
+            <div id="progList" class="mt-4 flex flex-col gap-3"></div>
+          </div>
+          <div class="card p-5 lg:col-span-2 min-w-0">
+            <h2 class="text-lg font-semibold">Próximos marcos</h2>
+            <div id="nextEvents" class="mt-3"></div>
+            <a href="#cronograma-completo" data-goto="fontes" class="text-sm font-semibold mt-3 inline-block" style="color: var(--accent)">Ver cronograma completo →</a>
+          </div>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2">
+          <div class="card p-5 min-w-0">
+            <h2 class="text-lg font-semibold">Revisões pendentes hoje</h2>
+            <div id="dashRev" class="mt-3 text-sm"></div>
+          </div>
+          <div class="card p-5 min-w-0">
+            <h2 class="text-lg font-semibold">Top 3 prioridades <span class="pill pill-rec align-middle ml-1">Recomendação</span></h2>
+            <div id="dashPrio" class="mt-3 text-sm"></div>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <h2 class="text-lg font-semibold">Cronograma oficial</h2>
+          <p class="text-xs text-muted mt-1">Anexo I, p. 28–29. Itens esmaecidos já passaram ou não se aplicam ao nível médio.</p>
+          <div id="cronoDash" class="mt-3"></div>
+        </div>
+      </section>
+
+      <!-- ===================== PROVA ===================== -->
+      <section data-view id="v-prova" class="flex flex-col gap-5" hidden>
+        <div>
+          <div class="eyebrow">Estrutura da prova · item 9.1.3, p. 14</div>
+          <h1 class="text-2xl md:text-3xl font-semibold mt-1">Prova objetiva e discursiva</h1>
+          <p class="text-muted mt-1 max-w-3xl">70 questões de múltipla escolha com 4 alternativas e uma correta (item 9.1.1). O edital distribui as questões por <b>área</b>, não por disciplina: a divisão interna de cada área não é informada.</p>
+        </div>
+
+        <div class="card p-0 overflow-hidden">
+          <div class="tbl-wrap">
+            <table class="tbl" id="tblProva"></table>
+          </div>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2">
+          <div class="card p-5 min-w-0">
+            <h2 class="text-lg font-semibold">Distribuição dos 100 pontos da objetiva</h2>
+            <p class="text-xs text-muted mt-1">Pontos máximos por área = questões × valor por questão.</p>
+            <div id="chartPts" class="mt-4"></div>
+          </div>
+          <div class="card p-5 min-w-0">
+            <h2 class="text-lg font-semibold">Quanto vale cada acerto</h2>
+            <p class="text-xs text-muted mt-1">Valor unitário por área (item 9.1.2, p. 13).</p>
+            <div id="chartUnit" class="mt-4"></div>
+          </div>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2">
+          <div class="card p-5 min-w-0">
+            <h2 class="text-lg font-semibold">Mínimos e regras eliminatórias</h2>
+            <ul class="mt-3 flex flex-col gap-3 text-sm" id="elimList"></ul>
+          </div>
+          <div class="card p-5 min-w-0">
+            <h2 class="text-lg font-semibold">Prova discursiva</h2>
+            <div class="tbl-wrap mt-3">
+              <table class="tbl">
+                <thead><tr><th>Critério (item 9.2.4, p. 16)</th><th class="r">Máx.</th></tr></thead>
+                <tbody>
+                  <tr><td>Conteúdo: ideias fundamentais, fidelidade ao tema, consistência, fundamentação e progressão temática</td><td class="r num">80</td></tr>
+                  <tr><td>Correção formal: ortografia, acentuação, propriedade vocabular, morfossintaxe, pontuação e coesão</td><td class="r num">20</td></tr>
+                </tbody>
+                <tfoot><tr><td>Total</td><td class="r num">100</td></tr></tfoot>
+              </table>
+            </div>
+            <ul class="mt-3 text-sm flex flex-col gap-1.5 list-disc pl-5">
+              <li>Tema sobre conhecimento específico do cargo (Anexo V); 20 a 30 linhas (item 9.2.3).</li>
+              <li>Mesmo dia da objetiva (item 9.2.1); manuscrita, caneta transparente azul ou preta (item 9.2.6).</li>
+              <li>Tipo textual exigido: <i>não informado no edital</i>.</li>
+              <li>Nota zero: em branco, fuga ao tema ou à tipologia, ilegível, outro idioma, outra tinta, plágio ou menos de 20 linhas (item 9.2.8).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h2 class="text-lg font-semibold">Simulador de nota</h2>
+            <span class="pill pill-inf">Inferência: aplica as regras oficiais aos números que você digitar</span>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+            <div><label class="lbl" for="simB">Acertos em Básicos (0–15)</label><input id="simB" class="field num" type="number" min="0" max="15" value="10"></div>
+            <div><label class="lbl" for="simG">Acertos em Gerais (0–15)</label><input id="simG" class="field num" type="number" min="0" max="15" value="9"></div>
+            <div><label class="lbl" for="simE">Acertos em Específicos (0–40)</label><input id="simE" class="field num" type="number" min="0" max="40" value="26"></div>
+            <div><label class="lbl" for="simD">Nota da discursiva (0–100)</label><input id="simD" class="field num" type="number" min="0" max="100" value="60"></div>
+          </div>
+          <div id="simOut" class="mt-4"></div>
+        </div>
+
+        <div class="card p-5">
+          <h2 class="text-lg font-semibold">Critérios de desempate</h2>
+          <p class="text-xs text-muted mt-1">Item 13.2, p. 21–22, na ordem em que aparecem no edital. A nota final é a soma de todas as etapas (item 13.1).</p>
+          <ol class="mt-3 text-sm flex flex-col gap-1.5 list-decimal pl-5">
+            <li>(a) Idoso (60+) de maior idade; idoso tem preferência sobre não idoso, na data da prova objetiva.</li>
+            <li>(b) Maior pontuação em títulos <span class="text-muted">— não se aplica ao nível médio, que não tem avaliação de títulos.</span></li>
+            <li>(c) Maior pontuação na prova discursiva.</li>
+            <li>(d) Maior pontuação em Conhecimentos Específicos.</li>
+            <li>(e) Maior pontuação em Conhecimentos Gerais.</li>
+            <li>(f) Maior pontuação em Conhecimentos Básicos.</li>
+            <li>(h) Ter exercido a função de jurado (art. 440 do CPP).</li>
+            <li>(g) Maior idade, entre não idosos; persistindo, horário de nascimento (item 13.2.1).</li>
+          </ol>
+          <div class="alert mt-3 text-sm">O edital lista a alínea “h” antes da “g”. A ordem de aplicação entre jurado e idade fica ambígua. Veja a área Fontes e alertas.</div>
+        </div>
+      </section>
+
+      <!-- ===================== EDITAL VERTICALIZADO ===================== -->
+      <section data-view id="v-edital" class="flex flex-col gap-4" hidden>
+        <div class="flex flex-wrap items-end justify-between gap-3 no-print">
+          <div>
+            <div class="eyebrow">Anexo V, p. 45–47 · conteúdo integral</div>
+            <h1 class="text-2xl md:text-3xl font-semibold mt-1">Edital verticalizado</h1>
+            <p class="text-muted mt-1 max-w-3xl">Todos os itens e subitens do conteúdo programático do Técnico Legislativo. A caixa de seleção marca o tópico como Estudado; o seletor ao lado define o status completo.</p>
+          </div>
+          <button id="printToggle" class="btn" type="button">Visualização de impressão</button>
+        </div>
+
+        <div id="editalInteractive" class="flex flex-col gap-4">
+          <div class="card p-4 no-print">
+            <div class="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+              <div class="lg:col-span-1"><label class="lbl" for="fBusca">Busca</label><input id="fBusca" class="field" type="search" placeholder="ex.: crase, Rusga, atos"></div>
+              <div><label class="lbl" for="fDisc">Disciplina</label><select id="fDisc" class="field"></select></div>
+              <div><label class="lbl" for="fStatus">Status de estudo</label><select id="fStatus" class="field"></select></div>
+              <div><label class="lbl" for="fRev">Revisão</label>
+                <select id="fRev" class="field">
+                  <option value="">Todas</option><option value="pend">Revisão pendente</option><option value="agen">Revisão agendada</option><option value="sem">Sem revisão agendada</option>
+                </select></div>
+              <div><label class="lbl" for="fPrio">Prioridade</label>
+                <select id="fPrio" class="field">
+                  <option value="">Todas</option><option value="rec-alta">Recomendada: alta</option><option value="u-alta">Sua prioridade: alta</option><option value="u-media">Sua prioridade: média</option><option value="u-baixa">Sua prioridade: baixa</option><option value="fraco">Marcados como ponto fraco</option>
+                </select></div>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2 mt-3 text-sm">
+              <span id="fCount" class="text-muted"></span>
+              <div class="flex gap-2">
+                <button class="btn btn-sm" type="button" id="expandAll">Expandir tudo</button>
+                <button class="btn btn-sm" type="button" id="collapseAll">Recolher tudo</button>
+                <button class="btn btn-sm" type="button" id="clearFilters">Limpar filtros</button>
+              </div>
+            </div>
+          </div>
+          <div id="editalList" class="flex flex-col gap-3"></div>
+        </div>
+
+        <div id="editalPrint" hidden>
+          <div class="no-print alert mb-3 text-sm">Visualização de impressão. Para imprimir ou salvar em PDF, abra o arquivo HTML no seu navegador e use Ctrl+P (Cmd+P no Mac). <button class="btn btn-sm ml-2" type="button" id="printBack">Voltar ao modo interativo</button></div>
+          <div class="print-sheet card p-6" id="printSheet"></div>
+        </div>
+      </section>
+
+      <!-- ===================== QUESTÕES ===================== -->
+      <section data-view id="v-questoes" class="flex flex-col gap-5" hidden>
+        <div>
+          <div class="eyebrow">Registro pessoal</div>
+          <h1 class="text-2xl md:text-3xl font-semibold mt-1">Questões resolvidas</h1>
+          <p class="text-muted mt-1 max-w-3xl">Registre cada bloco de questões. Taxa de acerto = acertos ÷ questões respondidas × 100.</p>
+        </div>
+
+        <form id="qForm" class="card p-5 grid gap-3 grid-cols-2 lg:grid-cols-6 items-end">
+          <div class="col-span-1"><label class="lbl" for="qData">Data</label><input id="qData" class="field" type="date" required></div>
+          <div class="col-span-1 lg:col-span-1"><label class="lbl" for="qDisc">Disciplina</label><select id="qDisc" class="field" required></select></div>
+          <div class="col-span-2 lg:col-span-2"><label class="lbl" for="qTopic">Tópico (opcional)</label><select id="qTopic" class="field"></select></div>
+          <div><label class="lbl" for="qTot">Respondidas</label><input id="qTot" class="field num" type="number" min="1" max="500" required></div>
+          <div><label class="lbl" for="qAc">Acertos</label><input id="qAc" class="field num" type="number" min="0" max="500" required></div>
+          <div class="col-span-2 lg:col-span-5"><label class="lbl" for="qObs">Fonte ou observação (opcional)</label><input id="qObs" class="field" type="text" placeholder="ex.: lista Selecon 2024, caderno de revisão"></div>
+          <div class="col-span-2 lg:col-span-1"><button class="btn btn-primary w-full justify-center" type="submit">Registrar</button></div>
+          <p id="qErr" class="col-span-2 lg:col-span-6 text-sm" style="color: var(--bad)" hidden></p>
+        </form>
+
+        <div class="grid gap-4 lg:grid-cols-5">
+          <div class="card p-0 lg:col-span-3 overflow-hidden min-w-0">
+            <div class="p-4 pb-0"><h2 class="text-lg font-semibold">Desempenho por disciplina</h2></div>
+            <div class="tbl-wrap mt-2"><table class="tbl" id="tblDesemp"></table></div>
+          </div>
+          <div class="card p-5 lg:col-span-2 min-w-0">
+            <h2 class="text-lg font-semibold">Taxa de acerto</h2>
+            <p class="text-xs text-muted mt-1">Mostrada a partir de 10 questões por disciplina.</p>
+            <div id="chartAcc" class="mt-4 flex flex-col gap-3"></div>
+          </div>
+        </div>
+
+        <div class="card p-0 overflow-hidden">
+          <div class="p-4 pb-0 flex items-center justify-between gap-2 flex-wrap"><h2 class="text-lg font-semibold">Histórico</h2><span class="text-xs text-muted" id="histCount"></span></div>
+          <div class="tbl-wrap mt-2"><table class="tbl" id="tblHist"></table></div>
+        </div>
+      </section>
+
+      <!-- ===================== PRIORIDADES ===================== -->
+      <section data-view id="v-prioridades" class="flex flex-col gap-5" hidden>
+        <div>
+          <div class="eyebrow">Recomendação do painel</div>
+          <h1 class="text-2xl md:text-3xl font-semibold mt-1">Ranking de prioridades</h1>
+          <p class="text-muted mt-1 max-w-3xl">Combina o peso oficial da área, o seu progresso, a sua taxa de acerto e o risco de eliminação. Não usa frequência histórica de cobrança, porque o edital não traz esse dado.</p>
+        </div>
+        <div class="card p-5 min-w-0">
+          <h2 class="text-lg font-semibold">Pontuação de prioridade (0–100)</h2>
+          <div id="chartPrio" class="mt-4 flex flex-col gap-3"></div>
+        </div>
+        <div class="card p-0 overflow-hidden"><div class="tbl-wrap"><table class="tbl" id="tblPrio"></table></div></div>
+        <div class="card p-5 text-sm">
+          <h2 class="text-lg font-semibold">Como a pontuação é calculada</h2>
+          <ul class="mt-3 flex flex-col gap-2 list-disc pl-5">
+            <li><b>Peso oficial (40%)</b>: pontos da área ÷ número de disciplinas da área, normalizado pelo maior valor (70 de Específicos). <span class="pill pill-inf">Inferência</span> O edital não informa a divisão de questões por disciplina dentro das áreas Básicos e Gerais; o painel assume divisão uniforme só para ordenar.</li>
+            <li><b>Progresso pendente (25%)</b>: parcela de tópicos ainda abaixo de Estudado.</li>
+            <li><b>Erro (20%)</b>: 1 − taxa de acerto. Com menos de 10 questões, a taxa é tratada como 50% e marcada como “Dados insuficientes”.</li>
+            <li><b>Risco de eliminação (15%)</b>: a objetiva elimina quem zera qualquer área ou faz menos de 40 pontos (item 9.1.5). Risco alto quando a taxa da área é menor que 30%; médio entre 30% e 50% ou sem dados; baixo acima de 50%.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===================== PLANO ===================== -->
+      <section data-view id="v-plano" class="flex flex-col gap-5" hidden>
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <div class="eyebrow">Recomendação do painel</div>
+            <h1 class="text-2xl md:text-3xl font-semibold mt-1">Plano semanal</h1>
+            <p class="text-muted mt-1 max-w-3xl">Informe suas horas por dia. O plano distribui os blocos pela pontuação de prioridade, reserva tempo para revisão e garante ao menos um bloco por disciplina quando houver tempo, para não zerar nenhuma área.</p>
+          </div>
+        </div>
+        <div class="card p-5">
+          <div class="grid grid-cols-4 sm:grid-cols-7 gap-3" id="hoursGrid"></div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+            <div><label class="lbl" for="pBloco">Duração do bloco</label>
+              <select id="pBloco" class="field"><option value="0.5">30 min</option><option value="1">1 h</option><option value="1.5">1h30</option><option value="2">2 h</option></select></div>
+            <div><label class="lbl" for="pRev">Tempo para revisão</label>
+              <select id="pRev" class="field"><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option></select></div>
+            <div><label class="lbl" for="pDisc">Treino de discursiva</label>
+              <select id="pDisc" class="field"><option value="1">1 bloco por semana</option><option value="2">2 blocos por semana</option><option value="0">Não incluir</option></select></div>
+            <div><label class="lbl" for="pIntervals">Intervalos de revisão (dias)</label><input id="pIntervals" class="field num" type="text" value="1, 7, 30"></div>
+          </div>
+          <div id="planSummary" class="mt-4 text-sm"></div>
+        </div>
+        <div id="planGrid" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7"></div>
+        <div class="card p-0 overflow-hidden">
+          <div class="p-4 pb-0"><h2 class="text-lg font-semibold">Horas da semana por disciplina</h2></div>
+          <div class="tbl-wrap mt-2"><table class="tbl" id="tblPlan"></table></div>
+        </div>
+      </section>
+
+      <!-- ===================== REVISÕES & PONTOS FRACOS ===================== -->
+      <section data-view id="v-revisoes" class="flex flex-col gap-5" hidden>
+        <div>
+          <div class="eyebrow">Acompanhamento</div>
+          <h1 class="text-2xl md:text-3xl font-semibold mt-1">Revisões e pontos fracos</h1>
+          <p class="text-muted mt-1 max-w-3xl">Ao marcar um tópico como Estudado, o painel agenda revisões nos intervalos definidos no Plano semanal.</p>
+        </div>
+        <div class="grid gap-4 lg:grid-cols-2">
+          <div class="card p-0 overflow-hidden min-w-0">
+            <div class="p-4 pb-2"><h2 class="text-lg font-semibold">Revisões pendentes</h2><p class="text-xs text-muted">Vencidas ou previstas para hoje.</p></div>
+            <div id="revPend"></div>
+          </div>
+          <div class="card p-0 overflow-hidden min-w-0">
+            <div class="p-4 pb-2"><h2 class="text-lg font-semibold">Próximas revisões</h2><p class="text-xs text-muted">Agendadas para os próximos 14 dias.</p></div>
+            <div id="revNext"></div>
+          </div>
+        </div>
+        <div class="card p-0 overflow-hidden">
+          <div class="p-4 pb-2"><h2 class="text-lg font-semibold">Pontos fracos</h2><p class="text-xs text-muted">Tópicos marcados por você, tópicos com taxa abaixo de 60% (5+ questões) e disciplinas com taxa abaixo de 60% (10+ questões).</p></div>
+          <div id="weakList"></div>
+        </div>
+      </section>
+
+      <!-- ===================== FONTES & ALERTAS ===================== -->
+      <section data-view id="v-fontes" class="flex flex-col gap-5" hidden>
+        <div>
+          <div class="eyebrow">Rastreabilidade</div>
+          <h1 class="text-2xl md:text-3xl font-semibold mt-1">Fontes, validação e alertas</h1>
+          <p class="text-muted mt-1 max-w-3xl">Documento analisado: Edital nº 001/2026-CMC, de 26 de outubro de 2026, <b>consolidado com a Retificação nº 01/2026</b> (60 páginas). As páginas citadas seguem a numeração “Página X de 60” do PDF. O documento consolidado não identifica quais trechos foram alterados pela retificação.</p>
+        </div>
+
+        <div class="card p-5">
+          <h2 class="text-lg font-semibold">Validação automática</h2>
+          <div id="validation" class="mt-3 flex flex-col gap-2 text-sm"></div>
+        </div>
+
+        <div class="card p-5">
+          <h2 class="text-lg font-semibold">Inconsistências e dados ausentes</h2>
+          <div id="alerts" class="mt-3 flex flex-col gap-2 text-sm"></div>
+        </div>
+
+        <div class="card p-0 overflow-hidden">
+          <div class="p-4 pb-0"><h2 class="text-lg font-semibold">Ficha do cargo</h2></div>
+          <div class="tbl-wrap mt-2"><table class="tbl" id="tblFicha"></table></div>
+        </div>
+
+        <div class="card p-5" id="cronograma-completo">
+          <h2 class="text-lg font-semibold">Cronograma completo</h2>
+          <p class="text-xs text-muted mt-1">Anexo I, p. 28–29, transcrito como publicado.</p>
+          <div id="cronoFull" class="mt-3"></div>
+        </div>
+
+        <div class="card p-5">
+          <h2 class="text-lg font-semibold">Atribuições do cargo</h2>
+          <p class="text-xs text-muted mt-1">Anexo IV, p. 32 (art. 4º, § 2º, da LC nº 235/2011).</p>
+          <p class="mt-3 text-sm max-w-3xl">“São atribuições do Técnico Legislativo da Câmara Municipal de Cuiabá desenvolver atividades próprias ao grau de complexidade de nível médio entre as quais dar suporte ao trabalho das Comissões Permanentes e Temporárias, secretariar, recepcionar, digitar, redigir textos e sinopses de atas, arquivar, fotografar, técnicas em contabilidade, técnica legislativa, técnica em higiene e segurança do trabalho dentre outras correlatas.”</p>
+        </div>
+
+        <div class="card p-5 no-print">
+          <h2 class="text-lg font-semibold">Backup dos seus dados</h2>
+          <p class="text-sm text-muted mt-1 max-w-3xl">Progresso, questões, revisões e configurações ficam no armazenamento local deste navegador. Copie o backup e guarde em um arquivo .json, ou importe um backup anterior. Os dados oficiais do edital não entram no backup e não podem ser alterados.</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <button class="btn btn-primary" type="button" id="expCopy">Copiar backup JSON</button>
+            <button class="btn" type="button" id="expDl">Baixar arquivo .json</button>
+            <label class="btn" for="impFile">Importar arquivo .json</label>
+            <input id="impFile" type="file" accept="application/json,.json" class="sr-only">
+            <button class="btn btn-danger" type="button" id="resetBtn">Apagar meu progresso</button>
+          </div>
+          <p class="text-xs text-muted mt-2">O download funciona quando o arquivo HTML é aberto direto no navegador. Na visualização hospedada, use “Copiar backup JSON”.</p>
+          <label class="lbl mt-4" for="expArea">Backup (copie daqui ou cole um backup para importar)</label>
+          <textarea id="expArea" class="field num text-xs" rows="5" spellcheck="false"></textarea>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <button class="btn btn-sm" type="button" id="impPaste">Importar o texto colado</button>
+            <span id="impConfirm" hidden class="flex flex-wrap gap-2 items-center text-sm"><span style="color: var(--bad)">Substituir todo o seu progresso atual?</span><button class="btn btn-sm btn-danger" type="button" id="impYes">Substituir</button><button class="btn btn-sm" type="button" id="impNo">Cancelar</button></span>
+            <span id="resetConfirm" hidden class="flex flex-wrap gap-2 items-center text-sm"><span style="color: var(--bad)">Apagar progresso, questões e configurações?</span><button class="btn btn-sm btn-danger" type="button" id="resetYes">Apagar</button><button class="btn btn-sm" type="button" id="resetNo">Cancelar</button></span>
+          </div>
+        </div>
+
+        <p class="text-xs text-muted">Dependências: Tailwind CSS (cdn.tailwindcss.com) e Google Fonts. É necessária conexão à internet para o visual completo; os dados e cálculos funcionam no próprio arquivo.</p>
+      </section>
+    </main>
+  </div>
+</div>
+<div id="tip" hidden></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+(function () {
+'use strict';
+
+/* =====================================================================
+   DADOS OFICIAIS (somente leitura) — extraídos do Edital nº 001/2026-CMC
+   consolidado com a Retificação nº 01/2026. Página = "Página X de 60".
+   ===================================================================== */
+function deepFreeze(o) { Object.values(o).forEach(v => { if (v && typeof v === 'object') deepFreeze(v); }); return Object.freeze(o); }
+
+const OFICIAL = deepFreeze({
+  examDate: '2026-12-20',
+  totalQuestoes: 70, totalPontos: 100, minimoObjetiva: 40, discursivaMax: 100, minimoDiscursiva: 40,
+  vagas: { total: 11, ac: 8, pcd: 1, ni: 2 },
+  areas: [
+    { id: 'bas', nome: 'Conhecimentos Básicos', q: 15, v: 1.00, pts: 15, cor: 'var(--c-bas)', discs: ['lp', 'rlm', 'inf', 'leg'] },
+    { id: 'ger', nome: 'Conhecimentos Gerais', q: 15, v: 1.00, pts: 15, cor: 'var(--c-ger)', discs: ['hgmt', 'eti', 'rel'] },
+    { id: 'esp', nome: 'Conhecimentos Específicos', q: 40, v: 1.75, pts: 70, cor: 'var(--c-esp)', discs: ['esp'] }
+  ],
+  disciplinas: [
+    { id: 'lp', area: 'bas', nome: 'Língua Portuguesa', fonte: 'Anexo V, p. 45', itens: [
+      ['1', 'Leitura e interpretação de textos de variados gêneros discursivos.'],
+      ['2', 'As condições de produção de um texto e as marcas composicionais de gêneros textuais diversos.'],
+      ['3', 'Linguagem e adequação social:', [
+        ['3.1', 'Variedades linguísticas e seus determinantes sociais, regionais, históricos e individuais.'],
+        ['3.2', 'Registros formal e informal da linguagem.']]],
+      ['4', 'Aspectos linguísticos na construção do texto:', [
+        ['4.1', 'Fonética: prosódia, ortografia.'],
+        ['4.2', 'Morfologia: formação, classificação e flexão das palavras.'],
+        ['4.3', 'Sintaxe: concordâncias verbal e nominal, regências verbal e nominal, colocação pronominal, emprego de nomes, pronomes, conjunções, advérbios, modos e tempos verbais.'],
+        ['4.4', 'Semântica: polissemia, paronímia, homonímia, denotação e conotação.']]],
+      ['5', 'Textualidade: coesão, coerência, intertextualidade, argumentação.'],
+      ['6', 'Pontuação.'],
+      ['7', 'Tipos de discurso: direto e indireto.']
+    ]},
+    { id: 'rlm', area: 'bas', nome: 'Raciocínio Lógico e Matemático', fonte: 'Anexo V, p. 45', itens: [
+      ['1', 'Operações com conjuntos.'],
+      ['2', 'Raciocínio lógico numérico: problemas envolvendo operações com números reais e raciocínio sequencial.'],
+      ['3', 'Conceito de proposição: valores lógicos das proposições. Conectivos e negação.'],
+      ['4', 'Argumentação lógica e diagramas lógicos.'],
+      ['5', 'Equivalências e implicações lógicas.'],
+      ['6', 'Quantificadores universal e existencial.'],
+      ['7', 'Problemas de contagem: princípios aditivo e multiplicativo.']
+    ]},
+    { id: 'inf', area: 'bas', nome: 'Noções de Informática', fonte: 'Anexo V, p. 45–46', itens: [
+      ['1', 'Microinformática: conceitos, hardware, software, dispositivos de entrada, saída e armazenamento.'],
+      ['2', 'Sistemas operacionais: conceitos, recursos e uso do Windows 10 e 11 e de distribuições Linux.'],
+      ['3', 'Pacotes de escritório: Microsoft Office/Microsoft 365 (Word, Excel e PowerPoint) e LibreOffice 7 ou superior (Writer, Calc e Impress): conceitos, recursos, atalhos de teclado e uso.'],
+      ['4', 'Redes de computadores e internet: conceitos, protocolos, arquitetura TCP/IP, navegadores (Microsoft Edge, Mozilla Firefox e Google Chrome), correio eletrônico e ferramentas de colaboração.'],
+      ['5', 'Computação em nuvem, armazenamento e serviços online. Redes sociais e comunicação digital.'],
+      ['6', 'Segurança da informação: conceitos, ameaças (vírus, malware, phishing e engenharia social), backup, firewall, antivírus e autenticação em dois fatores.'],
+      ['7', 'Noções da Lei nº 13.709/2018 (Lei Geral de Proteção de Dados Pessoais).']
+    ]},
+    { id: 'leg', area: 'bas', nome: 'Legislação', fonte: 'Anexo V, p. 46', itens: [
+      ['1', 'Lei Orgânica do Município de Cuiabá-MT.'],
+      ['2', 'Regimento Interno da Câmara Municipal de Cuiabá (Resolução nº 08, de 15 de dezembro de 2016).'],
+      ['3', 'Lei Complementar nº 93, de 23 de junho de 2003 (Estatuto dos Servidores).'],
+      ['4', 'Lei Complementar nº 235, de 3 de junho de 2011 (Plano de Cargos, Carreiras e Vencimentos da Câmara Municipal), com as alterações da Lei Complementar nº 609/2026.']
+    ]},
+    { id: 'hgmt', area: 'ger', nome: 'História e Geografia de Mato Grosso', fonte: 'Anexo V, p. 46–47', itens: [
+      ['HC', 'História de Mato Grosso: Período Colonial', [
+        ['HC.1', 'Os bandeirantes: escravidão indígena e exploração do ouro.'],
+        ['HC.2', 'A fundação de Cuiabá: tensões políticas entre os fundadores e a administração colonial.'],
+        ['HC.3', 'A fundação de Vila Bela da Santíssima Trindade e a criação da Capitania de Mato Grosso.'],
+        ['HC.4', 'A escravidão negra em Mato Grosso.']]],
+      ['HI', 'História de Mato Grosso: Período Imperial', [
+        ['HI.1', 'A crise da mineração e as alternativas econômicas da Província.'],
+        ['HI.2', 'A Rusga.'],
+        ['HI.3', 'Os quilombos em Mato Grosso.'],
+        ['HI.4', 'Os Presidentes de Província e suas realizações.'],
+        ['HI.5', 'A Guerra da Tríplice Aliança contra o Paraguai e a participação de Mato Grosso.'],
+        ['HI.6', 'A economia de Mato Grosso após a Guerra da Tríplice Aliança contra o Paraguai.'],
+        ['HI.7', 'O fim do Império em Mato Grosso.']]],
+      ['HR', 'História de Mato Grosso: Período Republicano', [
+        ['HR.1', 'O coronelismo em Mato Grosso.'],
+        ['HR.2', 'Economia de Mato Grosso na Primeira República: usinas de açúcar e criação de gado.'],
+        ['HR.3', 'Relações de trabalho em Mato Grosso na Primeira República.'],
+        ['HR.4', 'Mato Grosso durante a Era Vargas: política e economia.'],
+        ['HR.5', 'Política fundiária e as tensões sociais no campo.'],
+        ['HR.6', 'Os governadores estaduais e suas realizações.'],
+        ['HR.7', 'Tópicos relevantes e atuais de política, economia, sociedade, educação, tecnologia, energia, relações internacionais, desenvolvimento sustentável, segurança, ecologia e suas vinculações históricas.']]],
+      ['G', 'Geografia de Mato Grosso', [
+        ['G.1', 'Mato Grosso e a região Centro-Oeste.'],
+        ['G.2', 'Geopolítica de Mato Grosso.'],
+        ['G.3', 'Ocupação do território.'],
+        ['G.4', 'Aspectos físicos e domínios naturais do espaço mato-grossense.'],
+        ['G.5', 'Aspectos político-administrativos.'],
+        ['G.6', 'Aspectos socioeconômicos de Mato Grosso.'],
+        ['G.7', 'Formação étnica.'],
+        ['G.8', 'Programas governamentais e fronteira agrícola mato-grossense.'],
+        ['G.9', 'A economia do Estado no contexto nacional.'],
+        ['G.10', 'A urbanização do Estado.']]]
+    ]},
+    { id: 'eti', area: 'ger', nome: 'Noções de Ética e Filosofia', fonte: 'Anexo V, p. 47', itens: [
+      ['1', 'Fundamentos da Filosofia.'],
+      ['2', 'Filosofia moral: Ética ou filosofia moral.'],
+      ['3', 'Consciência crítica e filosofia.'],
+      ['4', 'A relação entre os valores éticos ou morais e a cultura.'],
+      ['5', 'Juízos de fato ou de realidade e juízos de valor.'],
+      ['6', 'Ética e cidadania.'],
+      ['7', 'Racionalismo ético.'],
+      ['8', 'Ética e liberdade.']
+    ]},
+    { id: 'rel', area: 'ger', nome: 'Relações Interpessoais', fonte: 'Anexo V, p. 47', itens: [
+      ['1', 'Relações Humanas/interpessoal.'],
+      ['2', 'Comunicação Interpessoal.'],
+      ['3', 'Característica de um bom atendimento.'],
+      ['4', 'Postura Profissional.'],
+      ['5', 'Integração.'],
+      ['6', 'Empatia.'],
+      ['7', 'Capacidade de ouvir.'],
+      ['8', 'Argumentação Flexível.']
+    ]},
+    { id: 'esp', area: 'esp', nome: 'Conhecimentos Específicos — Técnico Legislativo', fonte: 'Anexo V, p. 47', itens: [
+      ['1', 'Estado, governo e Administração Pública: conceitos, elementos, organização e princípios da Administração Pública.'],
+      ['2', 'Organização administrativa do Estado. Administração Direta e Indireta. Órgãos públicos. Agentes públicos: cargo, emprego e função pública.'],
+      ['3', 'Noções de Direito Administrativo: princípios administrativos; poderes administrativos; atos administrativos (conceito, requisitos, atributos e espécies).'],
+      ['4', 'Controle da Administração Pública: controle administrativo, legislativo e judicial. Responsabilidade civil da Administração Pública.'],
+      ['5', 'Direitos e garantias fundamentais. Direitos e deveres individuais e coletivos. Direitos sociais. Cidadania. Administração Pública (arts. 37 a 41 da Constituição Federal).'],
+      ['6', 'Organização e funcionamento do Poder Legislativo Municipal. Câmara Municipal. Mesa Diretora. Plenário. Comissões Permanentes e Temporárias.'],
+      ['7', 'Processo Legislativo e técnica legislativa.'],
+      ['8', 'Redação oficial: comunicações oficiais, ofícios, memorandos, requerimentos, atas, sinopses, relatórios e correspondências administrativas.'],
+      ['9', 'Arquivologia: protocolo, classificação, organização, guarda, conservação e arquivamento de documentos.'],
+      ['10', 'Atendimento ao público, recepção e relações interpessoais no ambiente de trabalho.'],
+      ['11', 'Noções de contabilidade aplicada ao setor público: receita, despesa e orçamento público.'],
+      ['12', 'Noções de higiene e segurança do trabalho.'],
+      ['13', 'Redação Oficial.']
+    ]}
+  ],
+  // Contagem esperada de itens folha (conferida manualmente contra o Anexo V)
+  esperado: { lp: 11, rlm: 7, inf: 7, leg: 4, hgmt: 28, eti: 8, rel: 8, esp: 13 },
+  cronograma: [
+    { d: '2026-10-26', ate: null, t: 'Publicação do Edital', h: '', p: 28 },
+    { d: '2026-10-29', ate: '2026-10-30', t: 'Prazo para impugnação do Edital; pedidos de isenção da taxa de inscrição', h: 'até 23h59min do último dia', p: 28, nota: 'Data inicial grafada “29/10/20526” no edital.' },
+    { d: '2026-10-29', ate: '2026-11-30', t: 'Período de inscrições', h: 'até 23h59min do último dia', p: 28 },
+    { d: '2026-11-10', ate: null, t: 'Resultado preliminar dos pedidos de isenção', h: 'a partir das 17h', p: 28 },
+    { d: '2026-11-11', ate: '2026-11-12', t: 'Recurso contra o resultado preliminar da isenção', h: 'até 23h59min do último dia', p: 28 },
+    { d: '2026-11-16', ate: null, t: 'Resultado definitivo dos pedidos de isenção', h: 'a partir das 17h', p: 28 },
+    { d: '2026-11-30', ate: null, t: 'Último dia para envio de laudo (PcD) e de documentos de autodeclaração (negros e indígenas), por upload', h: 'até 23h59min', p: 28 },
+    { d: '2026-12-01', ate: null, t: 'Último dia para pagamento da taxa de inscrição', h: 'horário bancário', p: 28 },
+    { d: '2026-12-04', ate: null, t: 'Resultado preliminar do pedido de reserva de vaga para PcD; homologação preliminar das inscrições', h: 'a partir das 17h', p: 28 },
+    { d: '2026-12-07', ate: '2026-12-08', t: 'Recurso contra indeferimento como PcD e contra a homologação preliminar das inscrições', h: 'até 23h59min do último dia', p: 28 },
+    { d: '2026-12-09', ate: null, t: 'Homologação definitiva das inscrições; resultado definitivo de PcD; Cartão de Confirmação de Inscrição (locais e horários)', h: 'a partir das 17h', p: 28 },
+    { d: '2026-12-20', ate: null, t: 'Aplicação das provas objetiva e discursiva', h: 'Turnos: item 10.1 (Técnico Legislativo à tarde)', p: 28, exam: true },
+    { d: '2026-12-21', ate: null, t: 'Gabarito preliminar da prova objetiva', h: 'até 23h59min do último dia', p: 28 },
+    { d: '2026-12-22', ate: '2026-12-23', t: 'Recurso contra questões e gabarito preliminar', h: 'a partir das 17h', p: 28 },
+    { d: '2027-01-11', ate: null, t: 'Gabarito definitivo; resultado preliminar da objetiva; relação preliminar de convocados para correção da discursiva', h: 'até 23h59min do último dia', p: 28 },
+    { d: '2027-01-12', ate: '2027-01-13', t: 'Recurso contra o resultado preliminar da objetiva e a relação de convocados para correção da discursiva', h: 'a partir das 17h', p: 28 },
+    { d: '2027-01-18', ate: null, t: 'Resultado dos recursos; resultado final da objetiva; relação final de discursivas a corrigir; convocação para heteroidentificação e verificação documental indígena', h: 'até 23h59min do último dia', p: 28 },
+    { d: '2027-01-26', ate: null, t: 'Resultado preliminar da prova discursiva; convocação preliminar para avaliação de títulos', h: 'a partir das 17h', p: 29 },
+    { d: '2027-01-27', ate: '2027-01-28', t: 'Recurso contra o resultado preliminar da discursiva e contra a convocação para títulos', h: 'até 23h59min do último dia', p: 29 },
+    { d: '2027-01-31', ate: null, t: 'Aferição da autodeclaração racial (heteroidentificação) e verificação documental indígena, presencial', h: 'Horário e local a definir (Cuiabá-MT)', p: 29 },
+    { d: '2027-02-02', ate: null, t: 'Resultado dos recursos; resultado final da discursiva; convocação definitiva para títulos; resultado preliminar da aferição racial e verificação étnica', h: 'a partir das 17h', p: 29 },
+    { d: '2027-02-03', ate: '2027-02-04', t: 'Recurso contra o resultado preliminar da aferição racial e verificação étnica; envio dos títulos (nível superior)', h: 'até 23h59min do último dia', p: 29 },
+    { d: '2027-02-12', ate: null, t: 'Resultado preliminar da avaliação de títulos; resultado do recurso e resultado final da aferição racial', h: 'a partir das 17h', p: 29 },
+    { d: '2027-02-15', ate: '2027-02-16', t: 'Recurso contra o resultado preliminar da avaliação de títulos', h: 'até 23h59min do último dia', p: 29, na: true },
+    { d: '2027-02-19', ate: null, t: 'Resultado dos recursos; resultado final da avaliação de títulos; resultado preliminar do concurso', h: 'a partir das 17h', p: 29 },
+    { d: '2027-02-22', ate: '2027-02-23', t: 'Recurso contra o resultado preliminar do concurso', h: 'até 23h59min do último dia', p: 29 },
+    { d: '2027-02-25', ate: null, t: 'Resultado final do concurso para homologação', h: 'a partir das 17h', p: 29 }
+  ],
+  ficha: [
+    ['Órgão', 'Câmara Municipal de Cuiabá-MT', 'Cabeçalho, p. 1'],
+    ['Edital', 'Nº 001/2026-CMC, de 26/10/2026, consolidado com a Retificação nº 01/2026', 'p. 1'],
+    ['Banca organizadora', 'Instituto Nacional de Seleções e Concursos (Instituto Selecon)', 'Item 1.1, p. 1'],
+    ['Cargo / código', 'Técnico Legislativo — CNM 01 (nível médio)', 'Anexo II, p. 30'],
+    ['Vagas imediatas', '11 (8 ampla concorrência, 1 PcD, 2 negros e indígenas)', 'Anexo II, p. 30'],
+    ['Cadastro de reserva', 'Sim (CR); quantidade não informada no edital', 'Anexo II, p. 30'],
+    ['Reserva PcD', '10% das vagas; fração acima de 0,5 arredonda para cima', 'Itens 6.2 e 6.2.1, p. 7–8'],
+    ['Reserva negros e indígenas', '20% das vagas, quando o cargo tem 3 ou mais vagas', 'Item 7.1, p. 9'],
+    ['Requisito', 'Ensino médio completo', 'Anexo III, p. 31'],
+    ['Vencimento inicial', 'R$ 5.518,91', 'Anexo III, p. 31'],
+    ['Auxílios', 'Auxílio-alimentação R$ 1.500,00 e auxílio-saúde R$ 1.000,00 mensais', 'Item 2.3.1, p. 2'],
+    ['Total mensal estimado', 'R$ 8.018,91 (soma de vencimento e auxílios; inferência)', 'Itens 2.3.1 e Anexo III'],
+    ['Jornada', '30 horas semanais', 'Item 2.2, p. 2; Anexo III'],
+    ['Regime', 'Estatutário (LC nº 93/2003)', 'Item 2.2, p. 2'],
+    ['Lotação', 'Conforme vagas e necessidade da Câmara na data da nomeação; local específico não informado', 'Item 16.9, p. 25'],
+    ['Taxa de inscrição', 'R$ 90,00 (nível médio), somente por boleto', 'Itens 5.2.3 e 5.2.4, p. 5'],
+    ['Isenção', 'Desempregado ou renda até 1 salário mínimo; doador de sangue ou medula; eleitor convocado; doadora de leite materno; mãe de criança com microcefalia; voluntário por 1 ano', 'Item 5.3.1, p. 6'],
+    ['Etapas', '1ª prova objetiva e 2ª prova discursiva, ambas eliminatórias e classificatórias; sem títulos', 'Item 4.1, p. 4'],
+    ['Local das provas', 'Cuiabá-MT (podendo incluir municípios limítrofes)', 'Item 1.5, p. 1'],
+    ['Duração', '4h30min (objetiva + discursiva)', 'Item 10.2, p. 17'],
+    ['Nota final', 'Soma das etapas: objetiva (100) + discursiva (100) = até 200 pontos (máximo é inferência)', 'Item 13.1, p. 21'],
+    ['Validade', '2 anos da homologação, prorrogável uma vez por igual período', 'Item 15.2, p. 24'],
+    ['Estágio probatório', '3 anos', 'Item 16.8, p. 25']
+  ]
+});
+
+const ALERTAS = deepFreeze([
+  { tipo: 'warn', t: 'Erro de digitação no cronograma', d: 'A data de início do prazo de impugnação e isenção aparece como “29/10/20526” (Anexo I, p. 28). O contexto indica 29/10/2026.' },
+  { tipo: 'warn', t: 'Horários possivelmente invertidos no cronograma', d: 'O gabarito preliminar (21/12) e o resultado de 11/01 aparecem com “até 23h59min”, e os recursos de 22–23/12 e 12–13/01 com “a partir das 17h”, ao contrário do padrão das demais linhas (Anexo I, p. 28). Confirme os prazos de recurso no site do Selecon.' },
+  { tipo: 'warn', t: 'Questões por disciplina não informadas', d: 'O item 9.1.3 (p. 14) informa questões apenas por área: 15 para as quatro disciplinas de Básicos e 15 para as três de Gerais. Qualquer divisão por disciplina neste painel é inferência e está sinalizada.' },
+  { tipo: 'warn', t: 'Ordem dos critérios de desempate', d: 'No item 13.2 (p. 21–22) a alínea “h” (jurado) aparece antes da “g” (maior idade). A ordem de aplicação entre esses dois critérios é ambígua.' },
+  { tipo: 'warn', t: 'Remissão a item errado (nomeação)', d: 'O item 16.1 (p. 24) cita “a proporção do item 7.6”, mas a regra de alternância (5ª vaga de cada 5 para negros ou indígenas) está no item 7.7 (p. 11).' },
+  { tipo: 'warn', t: 'Remissão a item errado (listas)', d: 'O item 6.13 (p. 9) remete ao item 13.6 para as listas separadas, que estão descritas no item 13.5 (p. 22).' },
+  { tipo: 'warn', t: 'Mesmo código para três cargos', d: 'Técnico Legislativo, Técnico Legislativo - Sonorização e Técnico Legislativo - Cerimonial usam o código CNM 01 (Anexo II, p. 30). Confira o nome do cargo ao se inscrever.' },
+  { tipo: 'info', t: 'Duplicidade no conteúdo específico', d: '“Redação oficial” aparece nos itens 8 e 13 do conteúdo específico (Anexo V, p. 47). Os dois itens foram mantidos.' },
+  { tipo: 'info', t: 'Texto repetido em História de MT', d: 'O trecho “Período Imperial” aparece duplicado no Anexo V (p. 46). Sem impacto no conteúdo.' },
+  { tipo: 'info', t: 'Horário da prova', d: 'Não informado no edital. O item 10.1 fixa apenas o turno da tarde para Técnico Legislativo; local e horário saem no Cartão de Confirmação de Inscrição em 09/12/2026.' },
+  { tipo: 'info', t: 'Tipo textual da discursiva', d: 'Não informado no edital. O item 9.2.3 diz apenas que o tema será de conhecimento específico do cargo.' },
+  { tipo: 'info', t: 'Correção da discursiva limitada', d: 'Só é corrigida a discursiva dos habilitados na objetiva até 20 vezes o número de vagas imediatas, mais empatados, além de todos os PcD e negros e indígenas habilitados (item 9.2.2, p. 15). Para 11 vagas, isso corresponde à 220ª posição (cálculo do painel). Os demais são eliminados.' },
+  { tipo: 'info', t: 'Retificação', d: 'O PDF é a versão consolidada com a Retificação nº 01/2026 e não destaca quais trechos mudaram. Acompanhe novas retificações em www.selecon.org.br.' }
+]);
+
+/* ===================== Utilidades ===================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = (n, d = 0) => Number(n).toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+const pad = n => String(n).padStart(2, '0');
+function todayISO() { const t = new Date(); return t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate()); }
+function parseISO(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+function addDays(iso, n) { const d = parseISO(iso); d.setDate(d.getDate() + n); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function diffDays(a, b) { return Math.round((parseISO(b) - parseISO(a)) / 86400000); }
+function br(iso) { const [y, m, d] = iso.split('-'); return d + '/' + m + '/' + y; }
+const WD = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+
+const STATUS = ['Não iniciado', 'Estudando', 'Estudado', 'Revisado', 'Dominado'];
+const AREA = Object.fromEntries(OFICIAL.areas.map(a => [a.id, a]));
+const DISC = Object.fromEntries(OFICIAL.disciplinas.map(d => [d.id, d]));
+const DISC_SHORT = { lp: 'Língua Portuguesa', rlm: 'Raciocínio Lógico', inf: 'Informática', leg: 'Legislação', hgmt: 'História e Geo. de MT', eti: 'Ética e Filosofia', rel: 'Relações Interpessoais', esp: 'Específicos' };
+
+// Achata a árvore: folhas rastreáveis + grupos
+const LEAVES = []; const TREE = {};
+OFICIAL.disciplinas.forEach(d => {
+  TREE[d.id] = [];
+  d.itens.forEach(it => {
+    if (it[2]) {
+      const g = { group: true, num: it[0], text: it[1], children: [] };
+      it[2].forEach(ch => { const L = { id: d.id + ':' + ch[0], disc: d.id, num: ch[0], text: ch[1], parent: it[1] }; LEAVES.push(L); g.children.push(L); });
+      TREE[d.id].push(g);
+    } else { const L = { id: d.id + ':' + it[0], disc: d.id, num: it[0], text: it[1] }; LEAVES.push(L); TREE[d.id].push(L); }
+  });
+});
+const LEAF = Object.fromEntries(LEAVES.map(l => [l.id, l]));
+
+/* ===================== Estado do usuário (localStorage) ===================== */
+const KEY = 'cmc-tecnico-legislativo-v1';
+function defaultState() {
+  return { v: 1, topics: {}, questoes: [], plano: { horas: [0, 2, 2, 2, 2, 2, 4], bloco: 1, rev: 20, disc: 1, intervalos: [1, 7, 30] }, theme: 'system' };
+}
+let state = defaultState();
+try { const raw = localStorage.getItem(KEY); if (raw) state = mergeState(JSON.parse(raw)); } catch (e) { /* armazenamento indisponível */ }
+function mergeState(s) {
+  const d = defaultState();
+  if (!s || typeof s !== 'object') return d;
+  return { v: 1, topics: (s.topics && typeof s.topics === 'object') ? s.topics : {}, questoes: Array.isArray(s.questoes) ? s.questoes : [], plano: Object.assign(d.plano, s.plano || {}), theme: s.theme || 'system' };
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { } }
+function T(id) { return state.topics[id] || { s: 0 }; }
+function setT(id, patch) { state.topics[id] = Object.assign({ s: 0 }, state.topics[id] || {}, patch); }
+
+/* ===================== Cálculos ===================== */
+function discProgress(did) {
+  const ls = LEAVES.filter(l => l.disc === did);
+  const done = ls.filter(l => T(l.id).s >= 2).length;
+  const counts = [0, 0, 0, 0, 0]; ls.forEach(l => counts[T(l.id).s || 0]++);
+  return { total: ls.length, done, pct: ls.length ? done / ls.length : 0, counts };
+}
+function qStats(filterFn) {
+  let n = 0, ac = 0; state.questoes.forEach(q => { if (filterFn(q)) { n += q.n; ac += q.ac; } });
+  return { n, ac, er: n - ac, taxa: n ? ac / n : null };
+}
+const discStats = did => qStats(q => q.disc === did);
+const areaStats = aid => qStats(q => AREA[aid].discs.includes(q.disc));
+const topicStats = tid => qStats(q => q.topic === tid);
+
+function areaRisk(aid) {
+  const s = areaStats(aid);
+  if (s.n < 10) return { v: 0.5, label: 'Médio', why: 'sem dados suficientes' };
+  if (s.taxa < 0.3) return { v: 1, label: 'Alto', why: 'taxa da área ' + fmt(s.taxa * 100) + '%' };
+  if (s.taxa < 0.5) return { v: 0.6, label: 'Médio', why: 'taxa da área ' + fmt(s.taxa * 100) + '%' };
+  return { v: 0.1, label: 'Baixo', why: 'taxa da área ' + fmt(s.taxa * 100) + '%' };
+}
+function priorities() {
+  return OFICIAL.disciplinas.map(d => {
+    const a = AREA[d.area];
+    const pesoPts = a.pts / a.discs.length;
+    const P = pesoPts / 70;
+    const pr = discProgress(d.id);
+    const st = discStats(d.id);
+    const taxaEff = st.n >= 10 ? st.taxa : 0.5;
+    const risk = areaRisk(d.area);
+    const score = 100 * (0.40 * P + 0.25 * (1 - pr.pct) + 0.20 * (1 - taxaEff) + 0.15 * risk.v);
+    return { d, a, pesoPts, P, pr, st, taxaEff, insuf: st.n < 10, risk, score };
+  }).sort((x, y) => y.score - x.score);
+}
+
+/* ===================== Navegação ===================== */
+const VIEWS = [
+  ['painel', 'Painel'], ['prova', 'Prova e pontos'], ['edital', 'Edital verticalizado'], ['questoes', 'Questões'],
+  ['prioridades', 'Prioridades'], ['plano', 'Plano semanal'], ['revisoes', 'Revisões e pontos fracos'], ['fontes', 'Fontes e alertas']
+];
+function buildNav() {
+  $('#navSide').innerHTML = VIEWS.map(([id, n]) => `<a class="nav-link" href="#${id}" data-nav="${id}"><span class="dot"></span>${n}</a>`).join('');
+  $('#navTop').innerHTML = VIEWS.map(([id, n]) => `<a class="nav-link text-sm" href="#${id}" data-nav="${id}">${n}</a>`).join('');
+}
+function route() {
+  let h = (location.hash || '#painel').slice(1);
+  let anchor = null;
+  if (h === 'cronograma-completo') { anchor = h; h = 'fontes'; }
+  if (!VIEWS.some(v => v[0] === h)) h = 'painel';
+  $$('section[data-view]').forEach(s => { s.hidden = s.id !== 'v-' + h; });
+  $$('[data-nav]').forEach(a => { if (a.dataset.nav === h) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  const cur = $('#navTop [aria-current="page"]'); if (cur) cur.scrollIntoView({ block: 'nearest', inline: 'center' });
+  if (anchor) { const el = document.getElementById(anchor); if (el) el.scrollIntoView(); } else window.scrollTo(0, 0);
+}
+
+/* ===================== Tema ===================== */
+function applyTheme() {
+  const r = document.documentElement;
+  if (state.theme === 'light' || state.theme === 'dark') r.setAttribute('data-theme', state.theme); else r.removeAttribute('data-theme');
+  const lbl = { system: 'sistema', light: 'claro', dark: 'escuro' }[state.theme];
+  $('#themeBtn').textContent = 'Tema: ' + lbl; $('#themeBtnM').textContent = 'Tema: ' + lbl;
+}
+function cycleTheme() { state.theme = { system: 'light', light: 'dark', dark: 'system' }[state.theme] || 'system'; save(); applyTheme(); }
+
+/* ===================== Tooltip e toast ===================== */
+const tip = $('#tip');
+document.addEventListener('mouseover', e => { const el = e.target.closest('[data-tip]'); if (!el) { tip.hidden = true; return; } tip.textContent = el.dataset.tip; tip.hidden = false; });
+document.addEventListener('mousemove', e => { if (tip.hidden) return; const x = Math.min(e.clientX + 14, window.innerWidth - tip.offsetWidth - 8); const y = Math.min(e.clientY + 14, window.innerHeight - tip.offsetHeight - 8); tip.style.left = x + 'px'; tip.style.top = y + 'px'; });
+document.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (!el) return; const r = el.getBoundingClientRect(); tip.textContent = el.dataset.tip; tip.hidden = false; tip.style.left = Math.min(r.left, window.innerWidth - tip.offsetWidth - 8) + 'px'; tip.style.top = (r.bottom + 6) + 'px'; });
+document.addEventListener('focusout', () => { tip.hidden = true; });
+let toastT; function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2600); }
+
+/* ===================== PAINEL ===================== */
+function statusDot(s) { return `<span class="st-dot" style="background: var(--st${s})"></span>`; }
+function renderPainel() {
+  const td = todayISO();
+  const dl = diffDays(td, OFICIAL.examDate);
+  $('#cdDays').textContent = dl > 0 ? fmt(dl) : (dl === 0 ? 'Hoje' : 'Realizada');
+
+  const prAll = LEAVES.filter(l => T(l.id).s >= 2).length;
+  const qs = qStats(() => true);
+  const pend = LEAVES.filter(l => T(l.id).r && T(l.id).r <= td).length;
+  const k = [
+    ['Vagas imediatas', '11', '8 AC · 1 PcD · 2 NI + cadastro de reserva', 'of', 'Anexo II, p. 30'],
+    ['Vencimento inicial', 'R$ 5.518,91', '+ R$ 2.500,00 em auxílios', 'of', 'Anexo III, p. 31; item 2.3.1'],
+    ['Objetiva', '70 q · 100 pts', 'mínimo 40 pts e nenhuma área zerada', 'of', 'Itens 9.1.3 e 9.1.5'],
+    ['Edital estudado', fmt(prAll / LEAVES.length * 100) + '%', prAll + ' de ' + LEAVES.length + ' tópicos', 'me', ''],
+    ['Taxa de acerto', qs.n ? fmt(qs.taxa * 100, 1) + '%' : 'Dados insuficientes', qs.n ? fmt(qs.n) + ' questões registradas' : 'registre questões na aba Questões', 'me', ''],
+    ['Revisões pendentes', String(pend), pend ? 'para hoje ou atrasadas' : 'nada vencido', 'me', '']
+  ];
+  $('#kpis').innerHTML = k.map(([l, v, s, kind, src]) => `
+    <div class="card p-4 flex flex-col gap-1 min-w-0" ${src ? `data-tip="Fonte: ${esc(src)}"` : ''}>
+      <div class="eyebrow flex items-center gap-1.5">${kind === 'of' ? '<span class="swatch" style="background: var(--accent)"></span>' : '<span class="swatch" style="background: var(--line)"></span>'}${l}</div>
+      <div class="num ${v.length > 14 ? 'text-sm pt-1.5' : 'text-xl'} font-medium">${v}</div>
+      <div class="text-xs text-muted">${s}</div>
+    </div>`).join('');
+
+  $('#progList').innerHTML = OFICIAL.disciplinas.map(d => {
+    const p = discProgress(d.id); const a = AREA[d.area];
+    const segs = p.counts.map((c, i) => c ? `<div style="width:${c / p.total * 100}%; background: var(--st${i}); height:100%" data-tip="${STATUS[i]}: ${c} tópico(s)"></div>` : '').join('');
+    return `<div>
+      <div class="flex justify-between gap-2 text-sm"><span class="flex items-center gap-2 min-w-0"><span class="swatch" style="background:${a.cor}" data-tip="${esc(a.nome)}"></span><span class="truncate">${esc(DISC_SHORT[d.id])}</span></span><span class="num text-muted">${p.done}/${p.total} · ${fmt(p.pct * 100)}%</span></div>
+      <div class="flex gap-0.5 mt-1.5 h-2.5 rounded overflow-hidden" style="background: var(--surface-2)">${segs}</div>
+    </div>`;
+  }).join('') + `<div class="flex flex-wrap gap-3 text-xs text-muted pt-1">${STATUS.map((s, i) => `<span class="flex items-center gap-1">${statusDot(i)}${s}</span>`).join('')}</div>`;
+
+  const upcoming = OFICIAL.cronograma.filter(c => (c.ate || c.d) >= td && !c.na).slice(0, 4);
+  $('#nextEvents').innerHTML = upcoming.map(c => {
+    const dd = diffDays(td, c.d);
+    const when = dd > 0 ? 'em ' + dd + ' dia' + (dd > 1 ? 's' : '') : (c.ate ? 'em andamento' : 'hoje');
+    return `<div class="py-2 border-t border-line first:border-t-0 text-sm">
+      <div class="flex justify-between gap-2"><span class="num font-medium">${br(c.d)}${c.ate ? ' a ' + br(c.ate) : ''}</span><span class="text-xs ${c.exam ? 'font-semibold' : 'text-muted'}" style="${c.exam ? 'color: var(--accent)' : ''}">${when}</span></div>
+      <div class="${c.exam ? 'font-semibold' : ''}">${esc(c.t)}</div></div>`;
+  }).join('') || '<p class="text-sm text-muted">Todos os marcos do cronograma já passaram.</p>';
+
+  // revisões
+  const pl = LEAVES.filter(l => T(l.id).r && T(l.id).r <= td).sort((a, b) => T(a.id).r.localeCompare(T(b.id).r));
+  $('#dashRev').innerHTML = pl.length ? `<ul class="flex flex-col gap-1.5">${pl.slice(0, 5).map(l => `<li class="flex gap-2"><span class="num text-xs text-muted shrink-0 pt-0.5">${br(T(l.id).r).slice(0, 5)}</span><span><b>${esc(DISC_SHORT[l.disc])}</b> · ${esc(l.num)} ${esc(trunc(l.text, 80))}</span></li>`).join('')}</ul>${pl.length > 5 ? `<a href="#revisoes" class="text-sm font-semibold mt-2 inline-block" style="color: var(--accent)">+${pl.length - 5} na aba Revisões →</a>` : ''}` : '<p class="text-muted">Nenhuma revisão vencida. Marque tópicos como Estudado no edital verticalizado para começar a agendar.</p>';
+
+  const pr = priorities().slice(0, 3);
+  $('#dashPrio').innerHTML = `<ol class="flex flex-col gap-2">${pr.map((p, i) => `<li class="flex gap-3 items-start"><span class="num text-muted">${i + 1}</span><div class="min-w-0 flex-1"><div class="flex justify-between gap-2"><b>${esc(DISC_SHORT[p.d.id])}</b><span class="num">${fmt(p.score)}</span></div><div class="text-xs text-muted">${esc(prioWhy(p))}</div></div></li>`).join('')}</ol>`;
+
+  $('#cronoDash').innerHTML = cronoHTML(true);
+}
+function trunc(s, n) { return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+function cronoHTML(compact) {
+  const td = todayISO();
+  return OFICIAL.cronograma.map(c => {
+    const past = (c.ate || c.d) < td;
+    const cls = c.exam ? 'exam' : (c.na ? 'na' : (past ? 'past' : ''));
+    const d = parseISO(c.d);
+    return `<div class="tl-item ${cls}">
+      <div class="num text-sm"><div class="font-medium">${br(c.d)}</div>${c.ate ? `<div class="text-xs text-muted">a ${br(c.ate)}</div>` : `<div class="text-xs text-muted">${WD[d.getDay()]}</div>`}</div>
+      <div class="text-sm min-w-0"><div class="${c.exam ? 'font-semibold' : ''}">${esc(c.t)}${c.na ? ' <span class="pill pill-rec ml-1">não se aplica ao nível médio</span>' : ''}</div>
+      ${compact ? '' : `<div class="text-xs text-muted mt-0.5">${esc(c.h || '—')} · Anexo I, p. ${c.p}${c.nota ? ' · ' + esc(c.nota) : ''}</div>`}</div>
+    </div>`;
+  }).join('');
+}
+function prioWhy(p) {
+  const bits = [];
+  bits.push(p.a.nome.replace('Conhecimentos ', '') + ' (' + p.a.pts + ' pts na área)');
+  bits.push(fmt(p.pr.pct * 100) + '% estudado');
+  bits.push(p.insuf ? 'acerto: dados insuficientes' : 'acerto ' + fmt(p.st.taxa * 100) + '%');
+  bits.push('risco ' + p.risk.label.toLowerCase());
+  return bits.join(' · ');
+}
+
+/* ===================== PROVA ===================== */
+function renderProva() {
+  const rows = OFICIAL.areas.map(a => {
+    const max = a.q * a.v;
+    return `<tr>
+      <td><div class="flex items-center gap-2 font-semibold"><span class="swatch" style="background:${a.cor}"></span>${a.nome}</div>
+        <div class="text-xs text-muted mt-1">${a.discs.map(id => esc(DISC[id].nome.replace(' — Técnico Legislativo', ' do cargo'))).join(' · ')}</div></td>
+      <td class="r num">${a.q}</td><td class="r num">${fmt(a.v, 2)}</td><td class="r num">${fmt(max, 0)}</td>
+      <td class="r num">${fmt(max / OFICIAL.totalPontos * 100, 0)}%</td>
+      <td class="text-sm">Não zerar a área</td>
+    </tr>`;
+  }).join('');
+  const sq = OFICIAL.areas.reduce((s, a) => s + a.q, 0), sp = OFICIAL.areas.reduce((s, a) => s + a.q * a.v, 0);
+  $('#tblProva').innerHTML = `<thead><tr><th>Área e disciplinas</th><th class="r">Questões</th><th class="r">Valor unit.</th><th class="r">Pontos máx.</th><th class="r">% da nota</th><th>Mínimo</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr><td>Total da objetiva</td><td class="r num">${sq}</td><td></td><td class="r num">${fmt(sp)}</td><td class="r num">100%</td><td class="text-sm">40 pontos (40%)</td></tr></tfoot>`;
+
+  $('#chartPts').innerHTML = `<div class="stack">${OFICIAL.areas.map(a => `<div style="width:${a.pts}%; background:${a.cor}" data-tip="${a.nome}: ${a.q} questões × ${fmt(a.v, 2)} = ${a.pts} pontos (${a.pts}% da objetiva)">${a.pts >= 15 ? a.pts : ''}</div>`).join('')}</div>
+    <div class="flex flex-col gap-1.5 mt-3 text-sm">${OFICIAL.areas.map(a => `<div class="flex items-center justify-between gap-2"><span class="flex items-center gap-2"><span class="swatch" style="background:${a.cor}"></span>${a.nome}</span><span class="num">${a.pts} pts · ${a.pts}%</span></div>`).join('')}</div>
+    <p class="text-xs text-muted mt-3">Específicos sozinhos valem 70% da objetiva. Com 23 acertos nessa área (23 × 1,75 = 40,25) já se alcança o mínimo de 40 pontos, desde que nenhuma área fique zerada. <span class="pill pill-inf">Inferência</span></p>`;
+
+  const maxV = 1.75;
+  $('#chartUnit').innerHTML = OFICIAL.areas.map(a => `<div class="mb-3"><div class="flex justify-between text-sm"><span>${a.nome}</span><span class="num">${fmt(a.v, 2)} pt</span></div>
+    <div class="bar-track mt-1" data-tip="${a.nome}: ${fmt(a.v, 2)} ponto por questão"><div class="bar-fill" style="width:${a.v / maxV * 100}%; background:${a.cor}"></div></div></div>`).join('') +
+    `<p class="text-xs text-muted">Um acerto em Específicos vale 1,75 acerto em Básicos ou Gerais.</p>`;
+
+  $('#elimList').innerHTML = [
+    ['Objetiva: no mínimo 40 dos 100 pontos <b>e</b> não zerar nenhuma das três áreas.', 'Item 9.1.5, p. 15'],
+    ['Discursiva só é corrigida para quem foi habilitado na objetiva e ficou até a posição de 20 × vagas imediatas (mais empatados), além de todos os PcD e negros e indígenas habilitados. Os demais são eliminados.', 'Item 9.2.2, p. 15'],
+    ['Discursiva: no mínimo 40 dos 100 pontos.', 'Item 9.2.9, p. 16'],
+    ['Discursiva com menos de 20 linhas, fora do tema, ilegível ou com marca de identificação recebe zero ou é anulada.', 'Itens 9.2.7 e 9.2.8, p. 16'],
+    ['Chegar após o fechamento dos portões, faltar ou portar objeto proibido elimina. Não há segunda chamada.', 'Itens 10.4, 10.6 e 11.1'],
+  ].map(([t, s]) => `<li class="flex gap-3"><span class="pill pill-bad shrink-0 h-fit">Eliminatório</span><div><div>${t}</div><div class="text-xs text-muted mt-0.5">${s}</div></div></li>`).join('');
+
+  renderSim();
+}
+function clampInput(el, max) { let v = parseFloat(el.value); if (isNaN(v)) v = 0; return Math.max(0, Math.min(max, v)); }
+function renderSim() {
+  const b = clampInput($('#simB'), 15), g = clampInput($('#simG'), 15), e = clampInput($('#simE'), 40), d = clampInput($('#simD'), 100);
+  const pb = b * 1, pg = g * 1, pe = e * 1.75, obj = pb + pg + pe;
+  const zero = [b === 0 && 'Básicos', g === 0 && 'Gerais', e === 0 && 'Específicos'].filter(Boolean);
+  const objOk = obj >= 40 && !zero.length; const discOk = d >= 40;
+  const motivos = [];
+  if (obj < 40) motivos.push('objetiva abaixo de 40 pontos');
+  if (zero.length) motivos.push('área zerada: ' + zero.join(', '));
+  if (objOk && !discOk) motivos.push('discursiva abaixo de 40 pontos');
+  $('#simOut').innerHTML = `<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="card p-3"><div class="eyebrow">Objetiva</div><div class="num text-xl">${fmt(obj, 2)}<span class="text-sm text-muted"> / 100</span></div><div class="text-xs text-muted">${fmt(pb, 0)} + ${fmt(pg, 0)} + ${fmt(pe, 2)}</div></div>
+      <div class="card p-3"><div class="eyebrow">Discursiva</div><div class="num text-xl">${objOk ? fmt(d, 0) : '—'}<span class="text-sm text-muted"> / 100</span></div><div class="text-xs text-muted">${objOk ? 'corrigida se dentro do corte do item 9.2.2' : 'não seria corrigida'}</div></div>
+      <div class="card p-3"><div class="eyebrow">Nota final</div><div class="num text-xl">${objOk && discOk ? fmt(obj + d, 2) : '—'}<span class="text-sm text-muted"> / 200</span></div><div class="text-xs text-muted">soma das etapas (item 13.1)</div></div>
+      <div class="card p-3 flex flex-col justify-center">${objOk && discOk ? '<span class="pill pill-good w-fit">Habilitado nos mínimos</span>' : '<span class="pill pill-bad w-fit">Eliminado</span>'}<div class="text-xs text-muted mt-1">${motivos.length ? esc(motivos.join('; ')) : 'Classificação depende do desempenho dos demais.'}</div></div>
+    </div>`;
+}
+
+/* ===================== EDITAL VERTICALIZADO ===================== */
+let openDiscs = new Set(['esp']);
+let recAltaDiscs = new Set();
+function filtersActive() { return $('#fBusca').value.trim() || $('#fDisc').value || $('#fStatus').value !== '' || $('#fRev').value || $('#fPrio').value; }
+function norm(s) { return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+function leafMatches(l) {
+  const td = todayISO(); const t = T(l.id);
+  const q = norm($('#fBusca').value.trim());
+  if (q && !norm(l.num + ' ' + l.text + ' ' + (l.parent || '')).includes(q)) return false;
+  if ($('#fDisc').value && l.disc !== $('#fDisc').value) return false;
+  if ($('#fStatus').value !== '' && String(t.s || 0) !== $('#fStatus').value) return false;
+  const fr = $('#fRev').value;
+  if (fr === 'pend' && !(t.r && t.r <= td)) return false;
+  if (fr === 'agen' && !(t.r && t.r > td)) return false;
+  if (fr === 'sem' && t.r) return false;
+  const fp = $('#fPrio').value;
+  if (fp === 'rec-alta' && !(recAltaDiscs.has(l.disc) && (t.s || 0) < 2)) return false;
+  if (fp && fp.startsWith('u-') && t.p !== fp.slice(2)) return false;
+  if (fp === 'fraco' && !t.w) return false;
+  return true;
+}
+function topicRowHTML(l) {
+  const t = T(l.id); const s = t.s || 0; const td = todayISO();
+  const ts = topicStats(l.id);
+  const rev = t.r ? (t.r <= td ? `<span class="pill pill-bad">Revisar: ${br(t.r).slice(0, 5)}</span>` : `<span class="pill pill-rec">Revisão ${br(t.r).slice(0, 5)}</span>`) : '';
+  const qtag = ts.n ? `<span class="pill ${ts.taxa < 0.6 ? 'pill-bad' : 'pill-good'}" data-tip="${ts.ac} acertos em ${ts.n} questões">${fmt(ts.taxa * 100)}% em ${ts.n} q</span>` : '';
+  return `<div class="topic-row" data-row="${l.id}">
+    <input type="checkbox" class="chk" data-chk="${l.id}" ${s >= 2 ? 'checked' : ''} aria-label="Marcar ${esc(l.num)} como estudado">
+    <div class="min-w-0">
+      <div class="text-sm"><span class="num text-muted mr-1">${esc(l.num)}</span>${esc(l.text)}</div>
+      <div class="topic-ctrls">
+        <span class="flex items-center gap-1">${statusDot(s)}<select data-st="${l.id}" aria-label="Status do tópico ${esc(l.num)}">${STATUS.map((n, i) => `<option value="${i}" ${i === s ? 'selected' : ''}>${n}</option>`).join('')}</select></span>
+        <select data-pr="${l.id}" aria-label="Sua prioridade para ${esc(l.num)}" title="Sua prioridade (ajuste pessoal)"><option value="">Sua prioridade: —</option><option value="alta" ${t.p === 'alta' ? 'selected' : ''}>Sua prioridade: alta</option><option value="media" ${t.p === 'media' ? 'selected' : ''}>Sua prioridade: média</option><option value="baixa" ${t.p === 'baixa' ? 'selected' : ''}>Sua prioridade: baixa</option></select>
+        <button type="button" class="star" data-wk="${l.id}" aria-pressed="${t.w ? 'true' : 'false'}">${t.w ? 'Ponto fraco' : 'Marcar ponto fraco'}</button>
+        ${rev}${t.r ? `<button type="button" class="btn btn-sm" data-revdone="${l.id}">Revisão feita</button>` : ''}${qtag}
+      </div>
+    </div>
+  </div>`;
+}
+function renderEdital() {
+  recAltaDiscs = new Set(priorities().slice(0, 3).map(p => p.d.id));
+  const active = filtersActive();
+  let shown = 0;
+  $('#editalList').innerHTML = OFICIAL.disciplinas.map(d => {
+    const a = AREA[d.area]; const p = discProgress(d.id);
+    let body = '';
+    let cnt = 0;
+    TREE[d.id].forEach(node => {
+      if (node.group) {
+        const kids = node.children.filter(leafMatches);
+        if (kids.length) { body += `<div class="group-head">${esc(node.num.length <= 2 && /^\d/.test(node.num) ? node.num + '. ' : '')}${esc(node.text)}</div>` + kids.map(topicRowHTML).join(''); cnt += kids.length; }
+      } else if (leafMatches(node)) { body += topicRowHTML(node); cnt++; }
+    });
+    shown += cnt;
+    if (!cnt) return '';
+    const open = active || openDiscs.has(d.id);
+    return `<details class="disc card overflow-hidden" data-disc="${d.id}" ${open ? 'open' : ''}>
+      <summary class="flex items-center gap-3 p-4">
+        <span class="chev text-muted" aria-hidden="true">›</span>
+        <span class="swatch" style="background:${a.cor}"></span>
+        <div class="min-w-0 flex-1"><div class="font-semibold">${esc(d.nome)}</div><div class="text-xs text-muted">${a.nome} · ${d.fonte}${active ? ' · ' + cnt + ' tópico(s) no filtro' : ''}</div></div>
+        <div class="text-right shrink-0"><div class="num text-sm">${p.done}/${p.total}</div><div class="w-20 bar-track mt-1"><div class="bar-fill" style="width:${p.pct * 100}%; background:${a.cor}"></div></div></div>
+      </summary>
+      <div>${body}</div>
+    </details>`;
+  }).join('') || '<div class="card p-6 text-center text-muted">Nenhum tópico corresponde aos filtros. <button class="btn btn-sm ml-2" type="button" data-clear>Limpar filtros</button></div>';
+  $('#fCount').textContent = active ? `${shown} de ${LEAVES.length} tópicos no filtro` : `${LEAVES.length} tópicos em ${OFICIAL.disciplinas.length} disciplinas`;
+}
+function renderPrintSheet() {
+  const today = todayISO();
+  $('#printSheet').innerHTML = `<div style="border-bottom:2px solid #111; padding-bottom:8px; margin-bottom:12px">
+      <div style="font-size:11px; letter-spacing:.08em; text-transform:uppercase">Câmara Municipal de Cuiabá-MT · Edital nº 001/2026-CMC (consolidado com a Retificação nº 01/2026)</div>
+      <h2 style="font-size:22px; font-weight:650; margin-top:4px">Edital verticalizado — Técnico Legislativo (CNM 01)</h2>
+      <div style="font-size:12px">Prova: 20/12/2026, turno da tarde · Objetiva 70 questões / 100 pontos · Discursiva 100 pontos · Gerado em ${br(today)}</div>
+    </div>` + OFICIAL.areas.map(a => `<h3 style="font-size:15px; font-weight:650; margin:16px 0 4px">${a.nome} — ${a.q} questões × ${fmt(a.v, 2)} = ${a.pts} pontos</h3>` +
+    a.discs.map(id => { const d = DISC[id]; const p = discProgress(id);
+      return `<div style="margin:10px 0 4px; font-weight:700; font-size:13px">${esc(d.nome)} <span style="font-weight:400; color:#555">(${d.fonte} · ${p.done}/${p.total} estudados)</span></div>` +
+        TREE[id].map(node => node.group
+          ? `<div style="font-size:12px; font-weight:700; margin-top:6px; text-transform:uppercase; color:#333">${esc(node.text)}</div>` + node.children.map(prRow).join('')
+          : prRow(node)).join('');
+    }).join('')).join('') + `<p style="font-size:11px; color:#555; margin-top:14px">Status: ✓ = Estudado, Revisado ou Dominado. Coluna da direita: status atual registrado no painel.</p>`;
+}
+function prRow(l) { const s = T(l.id).s || 0; return `<div class="pr-row"><span class="pr-box">${s >= 2 ? '✓' : ''}</span><span><b>${esc(l.num)}</b> ${esc(l.text)}</span><span style="font-size:11px; color:#555; text-align:right">${STATUS[s]}</span></div>`; }
+
+function setStatus(id, s) {
+  const t = T(id); const td = todayISO();
+  const patch = { s };
+  if (s >= 2 && (t.s || 0) < 2) { patch.d = td; patch.rc = 0; patch.r = addDays(td, state.plano.intervalos[0] || 1); }
+  if (s < 2) { patch.r = null; patch.rc = 0; }
+  if (s === 4) { patch.r = null; }
+  setT(id, patch);
+}
+function reviewDone(id) {
+  const t = T(id); const td = todayISO(); const rc = (t.rc || 0) + 1;
+  const next = state.plano.intervalos[rc];
+  setT(id, { rc, r: next ? addDays(td, next) : null, s: Math.max(t.s || 0, 3), lr: td });
+}
+
+/* ===================== QUESTÕES ===================== */
+function renderQuestoes() {
+  const rows = OFICIAL.disciplinas.map(d => { const s = discStats(d.id); return { d, s }; });
+  const tot = qStats(() => true);
+  $('#tblDesemp').innerHTML = `<thead><tr><th>Disciplina</th><th class="r">Respondidas</th><th class="r">Acertos</th><th class="r">Erros</th><th class="r">Taxa</th></tr></thead>
+    <tbody>${rows.map(({ d, s }) => `<tr><td><span class="flex items-center gap-2"><span class="swatch" style="background:${AREA[d.area].cor}"></span>${esc(DISC_SHORT[d.id])}</span></td><td class="r num">${s.n}</td><td class="r num">${s.ac}</td><td class="r num">${s.er}</td><td class="r num">${s.n ? fmt(s.taxa * 100, 1) + '%' : '<span class="text-muted text-xs">Dados insuficientes</span>'}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td>Total</td><td class="r num">${tot.n}</td><td class="r num">${tot.ac}</td><td class="r num">${tot.er}</td><td class="r num">${tot.n ? fmt(tot.taxa * 100, 1) + '%' : '—'}</td></tr></tfoot>`;
+
+  $('#chartAcc').innerHTML = rows.map(({ d, s }) => {
+    const ok = s.n >= 10; const col = AREA[d.area].cor;
+    return `<div><div class="flex justify-between text-sm gap-2"><span class="truncate">${esc(DISC_SHORT[d.id])}</span><span class="num ${ok ? '' : 'text-muted text-xs'}">${ok ? fmt(s.taxa * 100) + '%' : 'Dados insuficientes'}</span></div>
+      <div class="bar-track mt-1 relative" ${ok ? `data-tip="${esc(DISC_SHORT[d.id])}: ${s.ac} de ${s.n} (${fmt(s.taxa * 100, 1)}%)"` : ''}>${ok ? `<div class="bar-fill" style="width:${s.taxa * 100}%; background:${col}"></div>` : ''}</div></div>`;
+  }).join('') + `<div class="text-xs text-muted">Linha de referência sugerida: 60% para considerar ponto fraco <span class="pill pill-rec">Recomendação</span></div>`;
+
+  const list = state.questoes.slice().sort((a, b) => (b.data + b.id).localeCompare(a.data + a.id));
+  $('#histCount').textContent = list.length ? list.length + ' registro(s)' : '';
+  $('#tblHist').innerHTML = list.length ? `<thead><tr><th>Data</th><th>Disciplina</th><th>Tópico</th><th class="r">Resp.</th><th class="r">Acertos</th><th class="r">Taxa</th><th>Obs.</th><th></th></tr></thead>
+    <tbody>${list.map(q => `<tr><td class="num whitespace-nowrap">${br(q.data)}</td><td class="whitespace-nowrap">${esc(DISC_SHORT[q.disc] || q.disc)}</td><td class="text-xs">${q.topic && LEAF[q.topic] ? esc(LEAF[q.topic].num + ' ' + trunc(LEAF[q.topic].text, 60)) : '—'}</td><td class="r num">${q.n}</td><td class="r num">${q.ac}</td><td class="r num">${fmt(q.ac / q.n * 100)}%</td><td class="text-xs">${esc(q.obs || '')}</td><td><button class="btn btn-sm btn-danger" type="button" data-delq="${q.id}" aria-label="Excluir registro">Excluir</button></td></tr>`).join('')}</tbody>`
+    : '<tbody><tr><td class="text-muted p-4">Nenhuma questão registrada ainda. Use o formulário acima para lançar o primeiro bloco.</td></tr></tbody>';
+}
+function fillTopicSelect() {
+  const did = $('#qDisc').value;
+  const opts = ['<option value="">— disciplina inteira —</option>'];
+  TREE[did].forEach(n => {
+    if (n.group) opts.push(`<optgroup label="${esc(trunc(n.text, 60))}">` + n.children.map(l => `<option value="${l.id}">${esc(l.num + ' ' + trunc(l.text, 70))}</option>`).join('') + '</optgroup>');
+    else opts.push(`<option value="${n.id}">${esc(n.num + ' ' + trunc(n.text, 70))}</option>`);
+  });
+  $('#qTopic').innerHTML = opts.join('');
+}
+
+/* ===================== PRIORIDADES ===================== */
+function renderPrioridades() {
+  const pr = priorities();
+  $('#chartPrio').innerHTML = pr.map((p, i) => `<div><div class="flex justify-between text-sm gap-2"><span class="flex items-center gap-2 min-w-0"><span class="num text-muted w-4">${i + 1}</span><span class="swatch" style="background:${p.a.cor}"></span><span class="truncate">${esc(DISC_SHORT[p.d.id])}</span></span><span class="num">${fmt(p.score)}</span></div>
+    <div class="bar-track mt-1 ml-6" data-tip="Peso ${fmt(p.P * 40, 1)} + pendente ${fmt((1 - p.pr.pct) * 25, 1)} + erro ${fmt((1 - p.taxaEff) * 20, 1)} + risco ${fmt(p.risk.v * 15, 1)}"><div class="bar-fill" style="width:${p.score}%; background:${p.a.cor}"></div></div></div>`).join('') +
+    `<div class="flex flex-wrap gap-3 text-xs text-muted pt-1">${OFICIAL.areas.map(a => `<span class="flex items-center gap-1"><span class="swatch" style="background:${a.cor}"></span>${a.nome}</span>`).join('')}</div>`;
+  $('#tblPrio').innerHTML = `<thead><tr><th>#</th><th>Disciplina</th><th class="r">Pontos da área</th><th class="r">Peso estimado <span class="pill pill-inf">inf.</span></th><th class="r">Estudado</th><th class="r">Acerto</th><th>Risco de eliminação (área)</th><th class="r">Pontuação</th></tr></thead>
+    <tbody>${pr.map((p, i) => `<tr><td class="num">${i + 1}</td><td>${esc(DISC_SHORT[p.d.id])}<div class="text-xs text-muted">${p.a.nome}</div></td><td class="r num">${p.a.pts}</td><td class="r num">${fmt(p.pesoPts, 2)}</td><td class="r num">${fmt(p.pr.pct * 100)}%</td><td class="r num">${p.insuf ? '<span class="text-xs text-muted">Dados insuficientes</span>' : fmt(p.st.taxa * 100) + '%'}</td><td><span class="pill ${p.risk.label === 'Alto' ? 'pill-bad' : p.risk.label === 'Baixo' ? 'pill-good' : 'pill-inf'}">${p.risk.label}</span> <span class="text-xs text-muted">${esc(p.risk.why)}</span></td><td class="r num font-semibold">${fmt(p.score)}</td></tr>`).join('')}</tbody>`;
+}
+
+/* ===================== PLANO ===================== */
+const DAYS_ORDER = [1, 2, 3, 4, 5, 6, 0];
+const DAY_NAMES = { 0: 'Domingo', 1: 'Segunda', 2: 'Terça', 3: 'Quarta', 4: 'Quinta', 5: 'Sexta', 6: 'Sábado' };
+function renderHoursGrid() {
+  $('#hoursGrid').innerHTML = DAYS_ORDER.map(d => `<div><label class="lbl" for="h${d}">${DAY_NAMES[d]}</label><input id="h${d}" data-h="${d}" class="field num" type="number" min="0" max="16" step="0.5" value="${state.plano.horas[d]}"></div>`).join('');
+  $('#pBloco').value = String(state.plano.bloco); $('#pRev').value = String(state.plano.rev); $('#pDisc').value = String(state.plano.disc);
+  $('#pIntervals').value = state.plano.intervalos.join(', ');
+}
+function renderPlano() {
+  const P = state.plano; const B = P.bloco;
+  const cap = {}; let N = 0; let sobra = 0;
+  DAYS_ORDER.forEach(d => { const h = Math.max(0, +P.horas[d] || 0); cap[d] = Math.floor(h / B + 1e-9); N += cap[d]; sobra += h - cap[d] * B; });
+  const td = todayISO(); const dl = diffDays(td, OFICIAL.examDate);
+  const weeks = dl > 0 ? dl / 7 : 0;
+  if (!N) {
+    $('#planSummary').innerHTML = '<div class="alert">Informe ao menos um bloco de horas na semana para gerar o plano.</div>';
+    $('#planGrid').innerHTML = ''; $('#tblPlan').innerHTML = ''; return;
+  }
+  let nRev = Math.round(N * P.rev / 100); let nDisc = N >= 4 ? Math.min(P.disc, N - nRev - 1) : 0; if (nDisc < 0) nDisc = 0;
+  let nStudy = N - nRev - nDisc;
+  if (nStudy < 1) { nRev = Math.max(0, N - 1 - nDisc); nStudy = N - nRev - nDisc; }
+  const pr = priorities();
+  const alloc = {}; pr.forEach(p => alloc[p.d.id] = 0);
+  // 1) Blocos por área: 60% participação oficial nos pontos + 40% soma das pontuações de prioridade da área
+  // 2) Dentro da área: proporcional à pontuação de prioridade de cada disciplina
+  function lr(total, items, mins) { // maiores restos, com mínimos
+    const out = {}; let rest = total;
+    items.forEach(it => { out[it.id] = Math.min(mins ? (mins[it.id] || 0) : 0, rest); rest -= out[it.id]; });
+    const sw = items.reduce((s, it) => s + it.w, 0) || 1;
+    const raw = items.map(it => ({ id: it.id, x: rest * it.w / sw }));
+    raw.forEach(r => { out[r.id] += Math.floor(r.x); });
+    let left = total - Object.values(out).reduce((a, b) => a + b, 0);
+    raw.sort((a, b) => (b.x % 1) - (a.x % 1) || items.find(i => i.id === b.id).w - items.find(i => i.id === a.id).w).forEach(r => { if (left > 0) { out[r.id]++; left--; } });
+    return out;
+  }
+  const sumS = pr.reduce((s, p) => s + p.score, 0);
+  const areaScore = {}; pr.forEach(p => { areaScore[p.d.area] = (areaScore[p.d.area] || 0) + p.score; });
+  const areaItems = OFICIAL.areas.map(a => ({ id: a.id, w: 0.6 * (a.pts / 100) + 0.4 * (areaScore[a.id] / sumS) }));
+  const areaBlocks = lr(nStudy, areaItems, nStudy >= 3 ? { bas: 1, ger: 1, esp: 1 } : null);
+  let rodizio = false;
+  OFICIAL.areas.forEach(a => {
+    const ds = pr.filter(p => p.d.area === a.id);
+    const nb = areaBlocks[a.id];
+    if (nb < ds.length) rodizio = true;
+    const mins = nb >= ds.length ? Object.fromEntries(ds.map(p => [p.d.id, 1])) : null;
+    const res = lr(nb, ds.map(p => ({ id: p.d.id, w: p.score })), mins);
+    Object.assign(alloc, res);
+  });
+
+  // sequência intercalada
+  const remain = Object.assign({}, alloc); const seq = []; let last = null;
+  for (let i = 0; i < nStudy; i++) {
+    const cand = Object.keys(remain).filter(k => remain[k] > 0).sort((a, b) => remain[b] - remain[a]);
+    let pick = cand.find(k => k !== last) || cand[0];
+    seq.push(pick); remain[pick]--; last = pick;
+  }
+  // tópicos sugeridos por disciplina (pendentes em ordem do edital)
+  const pendTopics = {}; Object.keys(alloc).forEach(id => { pendTopics[id] = LEAVES.filter(l => l.disc === id && (T(l.id).s || 0) < 2); });
+  const ptr = {};
+  const daysBlocks = {}; DAYS_ORDER.forEach(d => daysBlocks[d] = []);
+  // discursiva no dia com mais blocos; revisão espalhada no início dos dias
+  const bigDay = DAYS_ORDER.slice().sort((a, b) => cap[b] - cap[a])[0];
+  for (let i = 0; i < nDisc; i++) daysBlocks[bigDay].push({ k: 'disc' });
+  let r = nRev; let guard = 0;
+  while (r > 0 && guard < 100) { DAYS_ORDER.forEach(d => { if (r > 0 && daysBlocks[d].length < cap[d]) { daysBlocks[d].unshift({ k: 'rev' }); r--; } }); guard++; }
+  let si = 0;
+  DAYS_ORDER.forEach(d => { while (daysBlocks[d].length < cap[d] && si < seq.length) { const id = seq[si++]; const list = pendTopics[id]; const j = ptr[id] || 0; ptr[id] = j + 1; daysBlocks[d].push({ k: 'study', id, topic: list.length ? list[j % list.length] : null }); } });
+
+  const hrs = n => fmt(n * B, n * B % 1 ? 1 : 0) + ' h';
+  $('#planSummary').innerHTML = `<div class="flex flex-wrap gap-x-6 gap-y-1">
+    <span><b class="num">${hrs(N)}</b> por semana em ${N} blocos</span>
+    <span><b class="num">${hrs(nStudy)}</b> conteúdo · <b class="num">${hrs(nRev)}</b> revisão · <b class="num">${hrs(nDisc)}</b> discursiva</span>
+    <span>${dl > 0 ? `<b class="num">${fmt(weeks, 1)}</b> semanas até a prova · cerca de <b class="num">${fmt(Math.round(weeks * N * B))} h</b> de estudo no total` : 'A data da prova já passou.'}</span>
+    ${sobra > 0.01 ? `<span class="text-muted">${fmt(sobra, 1)} h ficaram de fora por não completar um bloco.</span>` : ''}</div>
+    <p class="text-xs text-muted mt-2">Distribuição: 60% pelo peso oficial nos pontos e 40% pela pontuação de prioridade. ${rodizio ? 'Com poucas horas, cada área recebe ao menos um bloco e as disciplinas de Básicos e Gerais entram em rodízio conforme o seu progresso e desempenho mudam.' : 'Cada disciplina recebe ao menos um bloco.'} <span class="pill pill-rec">Recomendação</span></p>`;
+
+  $('#planGrid').innerHTML = DAYS_ORDER.map(d => `<div class="card p-3 plan-day flex flex-col gap-2">
+      <div class="flex justify-between items-baseline"><b class="text-sm">${DAY_NAMES[d]}</b><span class="num text-xs text-muted">${hrs(cap[d])}</span></div>
+      ${daysBlocks[d].length ? daysBlocks[d].map(b => {
+        if (b.k === 'rev') return `<div class="plan-block" style="border-left-color: var(--st3)"><b>Revisão</b><div class="text-xs text-muted">Pendências da aba Revisões</div></div>`;
+        if (b.k === 'disc') return `<div class="plan-block" style="border-left-color: var(--fg)"><b>Discursiva</b><div class="text-xs text-muted">Texto de 20–30 linhas, tema específico, à mão</div></div>`;
+        const a = AREA[DISC[b.id].area];
+        return `<div class="plan-block" style="border-left-color:${a.cor}"><b>${esc(DISC_SHORT[b.id])}</b><div class="text-xs text-muted">${b.topic ? esc(b.topic.num + ' ' + trunc(b.topic.text, 70)) : 'Todos os tópicos estudados: questões'}</div></div>`;
+      }).join('') : '<div class="text-xs text-muted">Folga</div>'}
+    </div>`).join('');
+
+  $('#tblPlan').innerHTML = `<thead><tr><th>Disciplina</th><th class="r">Blocos</th><th class="r">Horas</th><th class="r">% do tempo de conteúdo</th></tr></thead><tbody>${pr.map(p => `<tr><td><span class="flex items-center gap-2"><span class="swatch" style="background:${p.a.cor}"></span>${esc(DISC_SHORT[p.d.id])}</span></td><td class="r num">${alloc[p.d.id]}</td><td class="r num">${hrs(alloc[p.d.id])}</td><td class="r num">${fmt(alloc[p.d.id] / nStudy * 100)}%</td></tr>`).join('')}</tbody>`;
+}
+
+/* ===================== REVISÕES ===================== */
+function revRow(l, showBtn) {
+  const t = T(l.id); const td = todayISO(); const late = diffDays(t.r, td);
+  return `<div class="topic-row" style="grid-template-columns: 1fr auto">
+    <div class="min-w-0 text-sm"><div class="text-xs text-muted">${esc(DISC_SHORT[l.disc])} · ${t.rc ? t.rc + 'ª revisão feita' : 'primeira revisão'}${late > 0 ? ` · <span style="color: var(--bad)">${late} dia(s) de atraso</span>` : ''}</div><span class="num text-muted mr-1">${esc(l.num)}</span>${esc(trunc(l.text, 120))}</div>
+    <div class="flex flex-col items-end gap-1"><span class="num text-xs">${br(t.r)}</span>${showBtn ? `<button class="btn btn-sm" type="button" data-revdone="${l.id}">Revisão feita</button>` : ''}</div></div>`;
+}
+function renderRevisoes() {
+  const td = todayISO(); const lim = addDays(td, 14);
+  const pend = LEAVES.filter(l => T(l.id).r && T(l.id).r <= td).sort((a, b) => T(a.id).r.localeCompare(T(b.id).r));
+  const next = LEAVES.filter(l => T(l.id).r && T(l.id).r > td && T(l.id).r <= lim).sort((a, b) => T(a.id).r.localeCompare(T(b.id).r));
+  $('#revPend').innerHTML = pend.length ? pend.map(l => revRow(l, true)).join('') : '<p class="px-4 pb-4 text-sm text-muted">Nenhuma revisão vencida.</p>';
+  $('#revNext').innerHTML = next.length ? next.map(l => revRow(l, false)).join('') : '<p class="px-4 pb-4 text-sm text-muted">Nada agendado para os próximos 14 dias.</p>';
+
+  const items = [];
+  OFICIAL.disciplinas.forEach(d => { const s = discStats(d.id); if (s.n >= 10 && s.taxa < 0.6) items.push({ kind: 'disc', html: `<b>${esc(DISC_SHORT[d.id])}</b> (disciplina) · ${fmt(s.taxa * 100)}% em ${s.n} questões`, why: 'Taxa abaixo de 60%' }); });
+  LEAVES.forEach(l => {
+    const t = T(l.id); const s = topicStats(l.id);
+    const low = s.n >= 5 && s.taxa < 0.6;
+    if (t.w || low) items.push({ kind: 'topic', html: `<span class="text-xs text-muted">${esc(DISC_SHORT[l.disc])}</span><div><span class="num text-muted mr-1">${esc(l.num)}</span>${esc(trunc(l.text, 120))}</div>`, why: [t.w && 'Marcado por você', low && `${fmt(s.taxa * 100)}% em ${s.n} q`].filter(Boolean).join(' · '), id: l.id });
+  });
+  $('#weakList').innerHTML = items.length ? items.map(it => `<div class="topic-row" style="grid-template-columns: 1fr auto"><div class="min-w-0 text-sm">${it.html}</div><div class="flex flex-col items-end gap-1"><span class="pill pill-bad">${esc(it.why)}</span>${it.id && T(it.id).w ? `<button class="btn btn-sm" type="button" data-wk="${it.id}" aria-pressed="true">Remover marca</button>` : ''}</div></div>`).join('')
+    : '<p class="px-4 pb-4 text-sm text-muted">Nenhum ponto fraco identificado. Marque tópicos no edital verticalizado ou registre questões para alimentar esta lista.</p>';
+}
+
+/* ===================== FONTES / VALIDAÇÃO ===================== */
+function renderFontes() {
+  const sq = OFICIAL.areas.reduce((s, a) => s + a.q, 0);
+  const sp = OFICIAL.areas.reduce((s, a) => s + a.q * a.v, 0);
+  const areaOk = OFICIAL.areas.every(a => Math.abs(a.q * a.v - a.pts) < 1e-9);
+  const vagOk = OFICIAL.vagas.ac + OFICIAL.vagas.pcd + OFICIAL.vagas.ni === OFICIAL.vagas.total;
+  const pcdCalc = OFICIAL.vagas.total * 0.10; const niCalc = OFICIAL.vagas.total * 0.20;
+  const contOk = Object.entries(OFICIAL.esperado).every(([id, n]) => LEAVES.filter(l => l.disc === id).length === n);
+  const checks = [
+    [sq === OFICIAL.totalQuestoes, `Soma de questões por área: 15 + 15 + 40 = ${sq} (oficial: ${OFICIAL.totalQuestoes}).`, 'Item 9.1.3, p. 14'],
+    [Math.abs(sp - OFICIAL.totalPontos) < 1e-9, `Soma de pontos: 15 × 1,00 + 15 × 1,00 + 40 × 1,75 = ${fmt(sp)} (oficial: ${OFICIAL.totalPontos}).`, 'Itens 9.1.2 e 9.1.3'],
+    [areaOk, 'Pontos de cada área conferem com questões × valor unitário (15, 15 e 70).', 'Item 9.1.3'],
+    [true, 'Mínimo da objetiva: 40% = 40 pontos, sem zerar área. Mínimo da discursiva: 40 de 100.', 'Itens 9.1.5 e 9.2.9'],
+    [vagOk, `Vagas: 8 AC + 1 PcD + 2 NI = ${OFICIAL.vagas.ac + OFICIAL.vagas.pcd + OFICIAL.vagas.ni} (oficial: 11).`, 'Anexo II, p. 30'],
+    [Math.round(pcdCalc) === OFICIAL.vagas.pcd, `Reserva PcD: 10% de 11 = ${fmt(pcdCalc, 1)} → 1 vaga, coerente com o Anexo II.`, 'Itens 6.2 e 6.2.1'],
+    [Math.round(niCalc) === OFICIAL.vagas.ni, `Reserva negros e indígenas: 20% de 11 = ${fmt(niCalc, 1)} → 2 vagas, coerente com o Anexo II.`, 'Item 7.1'],
+    [true, 'Anexo II, total geral: 26 vagas (22 AC, 1 PcD, 3 NI), soma das linhas confere.', 'Anexo II, p. 30'],
+    [contOk, `Conteúdo programático: ${LEAVES.length} tópicos rastreáveis em 8 disciplinas, sem omissão em relação ao Anexo V (${Object.entries(OFICIAL.esperado).map(([k, v]) => DISC_SHORT[k] + ' ' + v).join(', ')}).`, 'Anexo V, p. 45–47']
+  ];
+  $('#validation').innerHTML = checks.map(([ok, t, s]) => `<div class="alert ${ok ? 'ok' : 'bad'}"><b>${ok ? 'Confere' : 'Divergência'}</b> · ${t} <span class="text-xs text-muted">(${s})</span></div>`).join('');
+  $('#alerts').innerHTML = ALERTAS.map(a => `<div class="alert ${a.tipo === 'warn' ? '' : 'ok'}" style="${a.tipo === 'info' ? 'border-left-color: var(--line); background: var(--surface-2)' : ''}"><b>${esc(a.t)}.</b> ${esc(a.d)}</div>`).join('');
+  $('#tblFicha').innerHTML = `<thead><tr><th>Dado</th><th>Valor</th><th>Fonte</th></tr></thead><tbody>${OFICIAL.ficha.map(([k, v, s]) => `<tr><td class="font-semibold whitespace-nowrap">${esc(k)}</td><td>${esc(v)}${/inferência/.test(v) ? '' : ''}</td><td class="text-xs text-muted whitespace-nowrap">${esc(s)}</td></tr>`).join('')}</tbody>`;
+  $('#cronoFull').innerHTML = cronoHTML(false);
+  $('#expArea').value = exportJSON();
+}
+function exportJSON() { return JSON.stringify({ app: 'painel-tecnico-legislativo-cmc-2026', exportadoEm: new Date().toISOString(), dados: state }, null, 2); }
+
+/* ===================== Render geral ===================== */
+function renderAll() {
+  renderPainel(); renderProva(); renderEdital(); renderQuestoes(); renderPrioridades(); renderPlano(); renderRevisoes(); renderFontes();
+  if (!$('#editalPrint').hidden) renderPrintSheet();
+}
+function commit(msg) { save(); renderAll(); if (msg) toast(msg); }
+
+/* ===================== Eventos ===================== */
+function init() {
+  buildNav(); applyTheme();
+  $('#themeBtn').addEventListener('click', cycleTheme); $('#themeBtnM').addEventListener('click', cycleTheme);
+  window.addEventListener('hashchange', route);
+  document.addEventListener('click', e => { const g = e.target.closest('[data-goto]'); if (g) { e.preventDefault(); location.hash = g.dataset.goto; setTimeout(() => { const el = document.getElementById('cronograma-completo'); if (el) el.scrollIntoView(); }, 30); } });
+
+  // filtros
+  $('#fDisc').innerHTML = '<option value="">Todas</option>' + OFICIAL.disciplinas.map(d => `<option value="${d.id}">${esc(DISC_SHORT[d.id])}</option>`).join('');
+  $('#fStatus').innerHTML = '<option value="">Todos</option>' + STATUS.map((s, i) => `<option value="${i}">${s}</option>`).join('');
+  ['#fBusca', '#fDisc', '#fStatus', '#fRev', '#fPrio'].forEach(s => $(s).addEventListener('input', renderEdital));
+  const clear = () => { $('#fBusca').value = ''; $('#fDisc').value = ''; $('#fStatus').value = ''; $('#fRev').value = ''; $('#fPrio').value = ''; renderEdital(); };
+  $('#clearFilters').addEventListener('click', clear);
+  $('#expandAll').addEventListener('click', () => { OFICIAL.disciplinas.forEach(d => openDiscs.add(d.id)); renderEdital(); });
+  $('#collapseAll').addEventListener('click', () => { openDiscs.clear(); renderEdital(); });
+  $('#editalList').addEventListener('toggle', e => { const d = e.target.closest('details.disc'); if (d && !filtersActive()) { if (d.open) openDiscs.add(d.dataset.disc); else openDiscs.delete(d.dataset.disc); } }, true);
+
+  document.addEventListener('change', e => {
+    const t = e.target;
+    if (t.dataset.chk) { setStatus(t.dataset.chk, t.checked ? Math.max(2, T(t.dataset.chk).s || 0) : 0); commit(t.checked ? 'Tópico marcado como estudado. Revisão agendada.' : 'Tópico desmarcado.'); }
+    else if (t.dataset.st) { setStatus(t.dataset.st, +t.value); commit('Status atualizado: ' + STATUS[+t.value] + '.'); }
+    else if (t.dataset.pr !== undefined && t.matches('select[data-pr]')) { setT(t.dataset.pr, { p: t.value || null }); commit('Sua prioridade foi salva.'); }
+  });
+  document.addEventListener('click', e => {
+    const w = e.target.closest('[data-wk]'); if (w) { const id = w.dataset.wk; setT(id, { w: !T(id).w }); commit(T(id).w ? 'Marcado como ponto fraco.' : 'Marca de ponto fraco removida.'); return; }
+    const r = e.target.closest('[data-revdone]'); if (r) { reviewDone(r.dataset.revdone); const nt = T(r.dataset.revdone); commit(nt.r ? 'Revisão registrada. Próxima em ' + br(nt.r) + '.' : 'Ciclo de revisões concluído.'); return; }
+    const dq = e.target.closest('[data-delq]'); if (dq) { state.questoes = state.questoes.filter(q => q.id !== dq.dataset.delq); commit('Registro excluído.'); return; }
+    if (e.target.closest('[data-clear]')) clear();
+  });
+
+  // impressão
+  $('#printToggle').addEventListener('click', () => { renderPrintSheet(); $('#editalInteractive').hidden = true; $('#editalPrint').hidden = false; $('#printToggle').hidden = true; window.scrollTo(0, 0); });
+  $('#printBack').addEventListener('click', () => { $('#editalInteractive').hidden = false; $('#editalPrint').hidden = true; $('#printToggle').hidden = false; });
+
+  // simulador
+  ['#simB', '#simG', '#simE', '#simD'].forEach(s => $(s).addEventListener('input', renderSim));
+
+  // questões
+  $('#qData').value = todayISO();
+  $('#qDisc').innerHTML = OFICIAL.disciplinas.map(d => `<option value="${d.id}">${esc(DISC_SHORT[d.id])}</option>`).join('');
+  $('#qDisc').value = 'esp'; fillTopicSelect();
+  $('#qDisc').addEventListener('change', fillTopicSelect);
+  $('#qForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const n = parseInt($('#qTot').value, 10), ac = parseInt($('#qAc').value, 10), err = $('#qErr');
+    if (!(n > 0)) { err.textContent = 'Informe quantas questões você respondeu (1 ou mais).'; err.hidden = false; return; }
+    if (!(ac >= 0) || ac > n) { err.textContent = 'Os acertos precisam estar entre 0 e o total respondido.'; err.hidden = false; return; }
+    err.hidden = true;
+    state.questoes.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), data: $('#qData').value || todayISO(), disc: $('#qDisc').value, topic: $('#qTopic').value || null, n, ac, obs: $('#qObs').value.trim() });
+    $('#qTot').value = ''; $('#qAc').value = ''; $('#qObs').value = '';
+    commit('Registrado: ' + ac + ' de ' + n + ' (' + fmt(ac / n * 100) + '%).');
+  });
+
+  // plano
+  renderHoursGrid();
+  $('#hoursGrid').addEventListener('input', e => { const d = e.target.dataset.h; if (d === undefined) return; state.plano.horas[+d] = Math.max(0, Math.min(16, parseFloat(e.target.value) || 0)); save(); renderPlano(); });
+  $('#pBloco').addEventListener('change', e => { state.plano.bloco = +e.target.value; save(); renderPlano(); });
+  $('#pRev').addEventListener('change', e => { state.plano.rev = +e.target.value; save(); renderPlano(); });
+  $('#pDisc').addEventListener('change', e => { state.plano.disc = +e.target.value; save(); renderPlano(); });
+  $('#pIntervals').addEventListener('change', e => {
+    const arr = e.target.value.split(/[,;\s]+/).map(Number).filter(n => n > 0 && n < 400);
+    if (!arr.length) { e.target.value = state.plano.intervalos.join(', '); toast('Use números de dias separados por vírgula, como 1, 7, 30.'); return; }
+    state.plano.intervalos = arr; e.target.value = arr.join(', '); commit('Intervalos de revisão salvos.');
+  });
+
+  // backup
+  $('#expCopy').addEventListener('click', () => {
+    const txt = exportJSON(); $('#expArea').value = txt;
+    try { navigator.clipboard.writeText(txt).then(() => toast('Backup copiado. Cole em um arquivo .json para guardar.'), () => { $('#expArea').select(); toast('Selecionei o backup no campo abaixo. Use Ctrl+C para copiar.'); }); }
+    catch (err) { $('#expArea').select(); toast('Selecionei o backup no campo abaixo. Use Ctrl+C para copiar.'); }
+  });
+  $('#expDl').addEventListener('click', () => {
+    try { const blob = new Blob([exportJSON()], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'backup-tecnico-legislativo-' + todayISO() + '.json'; document.body.appendChild(a); a.click(); a.remove(); toast('Download iniciado. Se nada acontecer, use “Copiar backup JSON”.'); }
+    catch (err) { toast('Download indisponível aqui. Use “Copiar backup JSON”.'); }
+  });
+  let pendingImport = null;
+  function stageImport(txt) {
+    try {
+      const obj = JSON.parse(txt); const data = obj && obj.dados ? obj.dados : obj;
+      if (!data || typeof data !== 'object' || !('topics' in data)) throw new Error('formato');
+      pendingImport = mergeState(data); $('#impConfirm').hidden = false;
+    } catch (err) { toast('Não reconheci o backup. Confira se é o JSON exportado por este painel.'); }
+  }
+  $('#impPaste').addEventListener('click', () => stageImport($('#expArea').value));
+  $('#impFile').addEventListener('change', e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => stageImport(String(r.result)); r.readAsText(f); e.target.value = ''; });
+  $('#impYes').addEventListener('click', () => { if (pendingImport) { state = pendingImport; pendingImport = null; $('#impConfirm').hidden = true; applyTheme(); renderHoursGrid(); commit('Backup importado.'); } });
+  $('#impNo').addEventListener('click', () => { pendingImport = null; $('#impConfirm').hidden = true; });
+  $('#resetBtn').addEventListener('click', () => { $('#resetConfirm').hidden = false; });
+  $('#resetNo').addEventListener('click', () => { $('#resetConfirm').hidden = true; });
+  $('#resetYes').addEventListener('click', () => { const th = state.theme; state = defaultState(); state.theme = th; $('#resetConfirm').hidden = true; renderHoursGrid(); commit('Progresso apagado.'); });
+
+  renderAll(); route();
+}
+init();
+})();
+</script>
+
+</body></html>
